@@ -1,0 +1,359 @@
+.mayuscula {
+    text-transform: uppercase;
+}
+
+.pcapital{
+    text-transform: capitalize;
+}
+
+.img{
+    vertical-align: middle;
+    margin-top: 6px;
+    width: 38px;
+
+}
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.palma a{
+    color: #ffffff;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.palma>li>a:hover,  .palma>li>a:focus {
+    text-decoration: none;
+    background-color: #0C9543;
+}
+
+.cabeza{
+    font-weight: bold;
+}
+
+.form{
+    margin-top: 0;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 30px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #19CE61;
+    border-right: 1px solid #eee;
+  }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.main {
+  padding: 60px;
+}
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+.main .page-header {
+  margin-top: 0;
+}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
+.lab label{
+    margin-top: 0;
+}
+
+.title{
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 15px;
+}
+
+.panel-green {
+  border-color: #5cb85c;
+}
+.panel-green > .panel-heading {
+  border-color: #5cb85c;
+  color: white;
+  background-color: #5cb85c;
+}
+.panel-green > a {
+  color: #5cb85c;
+}
+.panel-green > a:hover {
+  color: #3d8b3d;
+}
+.panel-red {
+  border-color: #d9534f;
+}
+.panel-red > .panel-heading {
+  border-color: #d9534f;
+  color: white;
+  background-color: #d9534f;
+}
+.panel-red > a {
+  color: #d9534f;
+}
+.panel-red > a:hover {
+  color: #b52b27;
+}
+.panel-yellow {
+  border-color: #f0ad4e;
+}
+.panel-yellow > .panel-heading {
+  border-color: #f0ad4e;
+  color: white;
+  background-color: #f0ad4e;
+}
+.panel-yellow > a {
+  color: #f0ad4e;
+}
+.panel-yellow > a:hover {
+  color: #df8a13;
+}
+.panel-purple {
+  border-color: #AF7AC5;
+}
+.panel-purple > .panel-heading {
+  border-color: #AF7AC5;
+  color: white;
+  background-color: #AF7AC5;
+}
+.panel-purple > a {
+  color: #AF7AC5;
+}
+.panel-purple > a:hover {
+  color: #76448A  ;
+}
+.panel-yll {
+  border-color: #45B39D;
+}
+.panel-yll > .panel-heading {
+  border-color: #45B39D;
+  color: white;
+  background-color: #45B39D;
+}
+.panel-yll > a {
+  color: #45B39D;
+}
+.panel-yll > a:hover {
+  color: #138D75;
+}
+.panel-gray {
+  border-color: #85929E;
+}
+.panel-gray > .panel-heading {
+  border-color: #85929E;
+  color: white;
+  background-color: #85929E;
+}
+.panel-gray > a {
+  color: #85929E;
+}
+.panel-gray > a:hover {
+  color: #1C2833;
+}
+
+.alt{
+    margin-top: 10px;
+}
+
+.mennu{
+    margin-top: 120px;
+    margin-left: 40px;
+}
+.msn{
+    margin-left: 80px;
+}
+.foo {
+    margin-top:250px;
+}
+
+.sinpadding [class*="col-"] {
+    padding: 0;
+}
+
+.multiselect {
+    width:20em;
+    height:15em;
+    border:solid 1px #c0c0c0;
+    overflow:auto;
+}
+.dialog-overlay{
+    display: none;
+    position: fixed;
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.3);
+
+    z-index: 10;
+}
+
+/* dialogo alert */
+
+.dialog-card{
+    box-sizing: border-box;
+    width: 570px;
+    position: absolute;
+    left: 50%;
+    margin-left: -285px;
+    top: 50%;
+    margin-top: -150px;
+
+    font: bold 14px sans-serif;
+
+    border-radius: 3px;
+    background-color:  #ffffff;
+    box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.12);
+    padding: 45px 50px;
+}
+
+.dialog-card .dialog-success-sign,
+.dialog-card .dialog-error-sign{
+    float: left;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    color:  #ffffff;
+    text-align: center;
+    line-height: 68px;
+    font-size: 40px;
+    margin-right: 50px;
+}
+
+.dialog-card .dialog-success-sign{
+    background-color: #bbda9c;
+}
+
+.dialog-card .dialog-error-sign{
+    background-color: #f59087;
+}
+
+.dialog-card .dialog-info{
+    float: left;
+    max-width: 350px;
+}
+
+.dialog-card h5{	/* titulo */
+    color:  #383c3e;
+    font-size: 24px;
+    margin: 5px 0 30px;
+}
+
+.dialog-card p{		/* texto */
+    color:  #595d60;
+    font-weight: normal;
+    line-height: 21px;
+
+    margin: 30px 0;
+}
+
+.dialog-card .dialog-confirm-button{
+    font-weight: inherit;
+    background-color:  #87bae1;
+    box-sizing: border-box;
+    color: #ffffff;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+    padding: 12px 32px;
+    border: 0;
+    cursor: pointer;
+    outline: 0;
+}
+
+.dialog-card button:hover{
+    opacity:0.96;
+}
+
+.dialog-card button:active{
+    position:relative;
+    bottom:-1px;
+}
+
+/* hacemos que el cuadro sea responsive con estas líneas */
+
+@media (max-width: 600px) {
+
+    .dialog-card{
+        width: 350px;
+        margin-left: -175px;
+        text-align: center;
+
+        padding: 45px 50px;
+    }
+
+    .dialog-card .dialog-success-sign,
+    .dialog-card .dialog-error-sign{
+        float: none;
+        margin: 0 auto 25px;
+    }
+
+    .dialog-card .dialog-info{
+        float: none;
+    }
+
+    .dialog-card p{
+        text-align: left;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .dialog-card{
+        width: 250px;
+        margin-left: -125px;
+
+        padding: 25px 30px;
+    }
+
+}
+
+.icon-logo{
+    text-align: left;
+    display: inline-block;
+    margin-left: -110px;
+}
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}

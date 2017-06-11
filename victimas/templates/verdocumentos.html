@@ -1,0 +1,103 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}Datos basicos{% endblock %}
+{% block content %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-md-12">
+            <h1 class="page-header">Subir documentos de soporte </h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <label>Digite el numero de cédula del beneficiario</label>
+        <form class="form-inline" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="number" name="buscalo" id="buscalo" class="form-control" required/>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search fa-lg"></i></button>
+            </div>
+        </form>
+
+        {% if cc %}
+        <iframe src="http://docs.google.com/viewer?url={{ cc }}" width="600" height="780" style="border: none;"></iframe>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'js/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        function comprobar(f) {
+            var extension = f.value.split('.').pop().toLowerCase();
+            var input = $("#img1")
+            if (extension != "pdf"){
+                swal({
+                    title: "Error!",
+                    text: "Solo se permiten archivos PDF!",
+                    type: "error",
+                    confirmButtonText: "Entendido",
+                });
+                input.replaceWith(input.val('').clone(true));
+                document.formulario.img2.required = false;
+                document.formulario.img2.required = false;
+
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        function comprobart(f) {
+            var extension = f.value.split('.').pop().toLowerCase();
+            var input = $("#img3")
+            if (extension != "pdf"){
+                swal({
+                    title: "Error!",
+                    text: "Solo se permiten archivos PDF!",
+                    type: "error",
+                    confirmButtonText: "Entendido",
+                });
+                input.replaceWith(input.val('').clone(true));
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        function comprobard(f) {
+            var extension = f.value.split('.').pop().toLowerCase();
+            var input = $("#img2")
+            if (extension != "pdf"){
+                swal({
+                    title: "Error!",
+                    text: "Solo se permiten archivos PDF!",
+                    type: "error",
+                    confirmButtonText: "Entendido",
+                });
+                input.replaceWith(input.val('').clone(true));
+            }
+        }
+    </script>
+
+
+{% endblock %}

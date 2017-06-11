@@ -1,0 +1,229 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% block title %}Datos de Caracterización{% endblock %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-md-12">
+            <h1 class="page-header">Datos de Caracterización</h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <form method="post" name="formulario">
+            {% csrf_token %}
+            <div class="tab-content">
+                <div class="tab-pane fade in active">
+                    <div class="col-md-12 form lab">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>Genero</label>{{ genero.1 }}
+                                            <select class="form-control" name="genero" id="genero"  required >
+                                                <option value=""> -------------- </option>
+                                                {% for h in generos %}
+                                                <option value="{{ h.0 }}" {% if genero.0 == h.0 %} selected {% endif %}> {{ h.1 }} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Condicion Sexual</label>
+                                            <select class="form-control" name="condicion" required>
+                                                <option value=""> -------------- </option>
+                                                {% for h in condiciones %}
+                                                <option value="{{ h.id }}" {% if condicion.id == h.id %} selected {% endif%}> {{ h.condicion }} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Pertenencia Etnica</label>
+                                            <select class="form-control" name="etnia" required>
+                                                <option value=""> -------------- </option>
+                                                {% for et in etnias %}
+                                                <option value="{{ et.id }}" {% if etnia.id == et.id %} selected {% endif %}> {{ et.etnia }} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Discapacidad</label>
+                                            <select class="form-control" name="discapacidad" id="discapacidad" required>
+                                                <option value=""> -------------- </option>
+                                                {% for disc in discapacidades %}
+                                                <option value="{{ disc.id }}" {% if discapacidad.id == disc.id %} selected {% endif %}> {{ disc.discapacidad }} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Detalle Discapacidad</label>
+                                            <select class="form-control" name="detDiscapacidad" id="detDiscapacidad" required>
+                                                <option value=""> -------------------- </option>
+                                                {% for discd in detDis %}
+                                                <option value="{{ discd.id }}" {% if detDiscapacidad.id == discd.id %} selected {% endif %}> {{ discd.discapacidad }} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Régimen de Salud</label>
+                                            <select class="form-control" name="regimen" required>
+                                                <option value=""> -------------- </option>
+                                                {% for reg in regimenes %}
+                                                <option value="{{ reg.id }}" {% if regimen.id == reg.id %} selected {% endif %}> {{ reg.regimen }} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Eps</label>
+                                            <select class="form-control" name="eps" id="eps" onchange="llamamodal(this.value);" required>
+                                                <option value=""> -------------- </option>
+                                                {% for e in epss %}
+                                                <option value="{{ e.id }}" {%if eps.id == e.id %} selected {% endif %}> {{ e.eps }} </option>
+                                                {% endfor %}
+                                                <option class="fa fa-plus" value="01"> &#xf067; Agregar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Pertenece a familias en acción</label>
+                                            <select class="form-control" name="faccion" required>
+                                                <option value=""> -------------- </option>
+                                                <option value="True" {% if faccion == True %} selected {% endif %}>Si </option>
+                                                <option value="False" {% if faccion == False %} selected {% endif %}>No </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="display:none;" id="oculto">
+                                        <div class="form-group" >
+                                            <label>Esta embarazada</label>
+                                            <select class="form-control" name="embarazo">
+                                                <option value="False" {% if embarazo == False %} selected {% endif %}>No</option>
+                                                <option value="True" {% if embarazo == True %} selected {% endif %}>Si</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn btn-success">Crear</button>
+                </div>
+            </div>
+        </form>
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Crear Eps</h4>
+                    </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>EPS</label>
+                                <input class="form-control pcapital" name="epsn" id="epsn" placeholder="Eps" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Código</label>
+                                <input class="form-control pcapital" name="codigop" id="codigop" placeholder="codigo" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="grabar();">Crear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        $('#discapacidad').on('change',inicio);
+        function inicio()
+        {
+            $("#detDiscapacidad").removeAttr("disabled");
+            if ( document.formulario.discapacidad.options[7].selected == true ){
+                document.formulario.detDiscapacidad.options[8].selected = true
+            }
+        }
+    </script>
+    <script>
+        $('#genero').on('change', habilita);
+        function habilita()
+        {
+            if (document.formulario.genero.options[2].selected == true ){
+                $("#oculto").removeAttr("style");
+            }else {
+                $("#oculto").css("display",'none');
+            }
+        }
+        window.onload = habilita();
+    </script>
+    <script>
+        function llamamodal(value)
+        {
+            if(value=="01"){
+                $('#myModal').modal('show');
+            }
+            else{
+                $('#myModal').modal('hide');
+            }
+        }
+    </script>
+    <script>
+        function grabar()
+        {
+            var codigop = $("#codigop").val();
+            var epsn = $("#epsn").val();
+            $.ajax({
+                data : { 'codigo': codigop, 'epsn': epsn },
+                url: '{% url "beneficiario:eps_nueva" %}',
+                type: 'get',
+            });
+        }
+    </script>
+{% endblock %}

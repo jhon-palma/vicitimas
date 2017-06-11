@@ -1,0 +1,192 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% block title %}Datos adicionales de la Residencia{% endblock %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-md-12">
+            <h1 class="page-header">Datos adicionales del Hogar</h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <form method="post" name="formulario">
+            {% csrf_token %}
+            <div class="tab-content">
+                <div class="tab-pane fade in active">
+                    <div class="col-md-12 form lab">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>En donde preparan los alimentos las personas de este hogar:</label>
+                                        <select class="form-control" name="cocina" id="cocina">
+                                            <option value=""> ---------------------------- </option>
+                                            <option value="En un espacio exclusivo para cocinar"{% if hogar.preparar == 'En un espacio exclusivo para cocinar' %}selected {% endif %}> En un espacio exclusivo para cocinar </option>
+                                            <option value="En un espacio NO exclusivo para cocinar"{% if hogar.preparar == 'En un espacio NO exclusivo para cocinar' %}selected {% endif %}> En un espacio NO exclusivo para cocinar </option>
+                                            <option value="En ninguna parte (no tiene cocina)"{% if hogar.preparar == 'En ninguna parte (no tiene cocina)' %}selected {% endif %}> En ninguna parte (no tiene cocina) </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="display:none;" id="oculto1">
+                                    <div class="form-group">
+                                        <label>La cocina o sitio para preparar alimentos es:</label>
+                                        <select class="form-control" name="usoCocina">
+                                            <option value=""> -------------------------- </option>
+                                            <option value="Del uso exclusivo del hogar"{% if hogar.cocina == 'Del uso exclusivo del hogar' %}selected {% endif %}>Del uso exclusivo del hogar</option>
+                                            <option value="Compartida con otros hogares"{% if hogar.cocina == 'Compartida con otros hogares' %}selected {% endif %}>Compartida con otros hogares</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="display:none;" id="oculto2">
+                                    <div class="form-group">
+                                        <label>Cuál combustible o fuente de energía utilizan principalmente para cocinar:</label>
+                                        <select class="form-control" name="combustible">
+                                            <option value=""> ------------------------ </option>
+                                            <option value="Electricidad"{% if hogar.combustibleCocina == 'Electricidad' %}selected {% endif %}> Electricidad </option>
+                                            <option value="Gas natural domiciliario"{% if hogar.combustibleCocina == 'Gas natural domiciliario' %}selected {% endif %}> Gas natural domiciliario </option>
+                                            <option value="Gas propano (en cilindro o pipeta)"{% if hogar.combustibleCocina == 'Gas propano (en cilindro o pipeta)' %}selected {% endif %}> Gas propano (en cilindro o pipeta) </option>
+                                            <option value="Kerosene, petróleo, gasolina, cocinol, alcoho"{% if hogar.combustibleCocina == 'Kerosene, petróleo, gasolina, cocinol, alcoho' %}selected {% endif %}> Kerosene, petróleo, gasolina, cocinol, alcohol </option>
+                                            <option value="Carbón mineral"{% if hogar.combustibleCocina == 'Carbón mineral' %}selected {% endif %}> Carbón mineral </option>
+                                            <option value="Material de desecho, leña, carbón de leña"{% if hogar.combustibleCocina == 'Material de desecho, leña, carbón de leña' %}selected {% endif %}> Material de desecho, leña, carbón de leña </option>
+                                            <option value="Ninguno"{% if hogar.combustibleCocina == 'Ninguno' %}selected {% endif %}> Ninguno </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Qué tipo de alumbrado utilizan principalmente:</label>
+                                            <select class="form-control" name="alumbrado">
+                                                <option value=""> ------------------------ </option>
+                                                <option value="Eléctrico"{% if hogar.alumbrado == 'Eléctrico' %}selected {% endif %}> Eléctrico </option>
+                                                <option value="Solar, bioenergía, otros"{% if hogar.alumbrado == 'Solar, bioenergía, otros' %}selected {% endif %}> Solar, bioenergía, otros </option>
+                                                <option value="Kerosene, petróleo, gasolina"{% if hogar.alumbrado == 'Kerosene, petróleo, gasolina' %}selected {% endif %}> Kerosene, petróleo, gasolina </option>
+                                                <option value="Vela"{% if hogar.alumbrado == 'Vela' %}selected {% endif %}> Vela </option>
+                                                <option value="Ninguno"{% if hogar.alumbrado == 'Ninguno' %}selected {% endif %}> Ninguno </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>El servicio telefónico es:<br>&nbsp</label>
+                                            <select class="form-control" name="telefono">
+                                                <option value=""> -------------------------- </option>
+                                                <option value="De uso exclusivo del hogar"{% if hogar.stelefono == "De uso exclusivo del hogar" %}selected {% endif %}>De uso exclusivo del hogar</option>
+                                                <option value="Compartido con otros hogares"{% if hogar.stelefono == "Compartido con otros hogares" %}selected {% endif %}>Compartido con otros hogares</option>
+                                                <option value="No tiene"{% if hogar.stelefono == "No tiene" %}selected {% endif %}>No tiene</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <label>Total de personas en el hogar:<br>&nbsp</label>
+                                            <input class="form-control" name="personas" type="number" value="{{ hogar.diasAgua }}" autocomplete="off" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label>El hogar cuenta con los siguientes bienes o servicios:</label>
+                                            {% for x in bienes %}
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="bienes[]" id="{{ x.id }}" value="{{ x.id }}" {% for y in bienesh %} {% if y.bienes_id == x.id %} checked {% endif %} {% endfor %}/>{{ x.bienes }}
+                                                    </label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        $('#cocina').on('change', habilita);
+        function habilita()
+        {
+            if (document.formulario.cocina.options[3].selected == false ){
+                $("#oculto1").removeAttr("style");
+                $("#oculto2").removeAttr("style");
+                $("#oculto3").removeAttr("style");
+            }else {
+                $("#oculto1").css("display",'none');
+                $("#oculto2").css("display",'none');
+                $("#oculto3").css("display",'none');
+            }
+        }
+        window.onload = habilita();
+    </script>
+    <script>
+        $('#obtagua').on('change', habilitas);
+        function habilitas()
+        {
+            if (document.formulario.obtagua.options[1].selected == true ){
+                $("#oculto4").removeAttr("style");
+                $("#oculto6").removeAttr("style");
+            }else {
+                $("#oculto4").css("display",'none');
+                $("#oculto6").css("display",'none');
+            }
+        }
+        window.onload = habilitas();
+    </script>
+    <script>
+        $('#dllega').on('change', habilitad);
+        function habilitad()
+        {
+            if (document.formulario.dllega.options[2].selected == true ){
+                $("#oculto5").removeAttr("style");
+            }else {
+                $("#oculto5").css("display",'none');
+            }
+        }
+        window.onload = habilitad();
+    </script>
+    <script>
+        $('#hllega').on('change', habilita);
+        function habilita()
+        {
+            if (document.formulario.hllega.options[2].selected == true ){
+                $("#oculto7").removeAttr("style");
+            }else {
+                $("#oculto7").css("display",'none');
+            }
+        }
+        window.onload = habilita();
+    </script>
+{% endblock %}

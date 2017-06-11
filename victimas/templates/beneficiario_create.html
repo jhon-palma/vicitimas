@@ -1,0 +1,562 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% block content %}
+{% block menuc %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div  class="col-md-12">
+        {% for message in messages %}
+            {% if 'success' in message.tags %}
+                <div class="alert alert-success">
+                    <a class="close" href="#" data-dismiss="alert">×</a>
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+        {% for message in messages %}
+            {% if 'error' in message.tags %}
+                <div class="alert alert-error">
+                    <a class="close" href="#" data-dismiss="alert">×</a>
+                    <strong>Error!</strong>
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+        {% for message in messages %}
+            {% if 'warning' in message.tags %}
+                <div class="alert alert-danger">
+                    <a class="close" href="#" data-dismiss="alert">×</a>
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% if ben %}
+    <h1 class="page-header">{{ ben.nombreUno|capfirst }} {{ ben.nombreDos|capfirst }} {{ ben.apellidoUno|capfirst }} {{ ben.apellidoDos|capfirst }}</h1>
+    <h3 class="page-header">{{ ben.tipoDocumento.codigo }} {{ ben.numeroDocumento }} </h3>
+
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <a href="{% url 'beneficiario:datosBasicosEditar' ben.id %}">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-address-book-o fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div>Datos</div>
+                                <div class="title">Básicos</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <span class="pull-left">Editar</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-map-signs fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div>Datos de</div>
+                            <div class="title">Procedencia</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">Crear</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-yellow">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-home fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div>Datos de</div>
+                            <div class="title">Residencia</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">Crear</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-red">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-id-card fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div>Datos de</div>
+                            <div class="title">Caracterización</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">Crear</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-gray">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-graduation-cap fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div>Datos de</div>
+                            <div class="title">Educación</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">Crear</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-yll">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-wrench fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div>Información</div>
+                            <div class="title">Laboral</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">Crear</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-yellow">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-home fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div>Datos de</div>
+                            <div class="title">Residencia</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">Crear</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-red">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-id-card fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div>Datos de</div>
+                            <div class="title">Caracterización</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">Crear</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {% if msg %}
+    <div class="alert alert-danger"> {{ msg }} </div>
+            {% endif %}
+            <!-- /.row -->
+    <div class="col-md-12">
+        <h1 class="page-header">Creación de usuarios</h1>
+    </div>
+    <ul class="nav nav-tabs nav-justified cabeza">
+        <li><a href="#procedencia" data-toggle="tab">Datos de procedencia</a></li>
+        <li><a href="#residencia" data-toggle="tab">Datos Residencia</a></li>
+        <li><a href="#generales" data-toggle="tab">Datos de caracterización</a></li>
+        <li><a href="#educacion" data-toggle="tab">Datos de educación</a></li>
+    </ul>
+    <form method="post">
+        {% csrf_token %}
+        <div class="tab-content">
+            <div class="tab-pane fade" id="procedencia">
+                <div class="col-md-12 form lab">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Departamento de procedencia: </label>
+                                    <select class="form-control" id="depart" name="departamento"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for departamento in departamentos %}
+                                        <option value="{{ departamento.id }}"> {{ departamento.departamento }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <label>Ciudad de procedencia: </label>
+                                    <select class="form-control" name="ciudadp" id="ciud"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for ciudad in ciudades %}
+                                        <option value="{{ ciudad.id }}"> {{ ciudad.ciudad }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <label>Hecho victimizante: </label>
+                                    <select class="form-control" name="hecho"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for h in hecho %}
+                                        <option value="{{ h.id }}"> {{ h.hecho }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="residencia">
+                <div class="col-md-12 form lab">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Departamento: </label>
+                                    <select class="form-control" id="dep" name="departamentov"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for departamento in departamentos %}
+                                        <option value="{{ departamento.id }}"> {{ departamento.departamento }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <label>Ciudad: </label>
+                                    <select class="form-control" name="ciudadv" id="ciu"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for ciudad in ciudades %}
+                                        <option value="{{ ciudad.id }}"> {{ ciudad.ciudad }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="nivel">Zona: </label>
+                                    <select class="form-control" name="zonaPredio"  >
+                                        <option value="0"> --- </option>
+                                        {% for zona in zonas %}
+                                        <option value="{{ zona.0 }}"> {{ zona.1 }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Dirección de residencia actual:</label>
+                                        <input class="form-control" name="direccion" placeholder="Dirección"   type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Barrio:</label>
+                                        <input class="form-control" name="barrio" placeholder="Barrio"   type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="nivel">Estrato: </label>
+                                    <select class="form-control" name="estratoPredio"  >
+                                        <option value="0"> --- </option>
+                                        {% for estrato in estratos %}
+                                        <option value="{{ estrato.0 }}"> {{ estrato.0 }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Tipo de Vivienda: </label>
+                                    <select class="form-control" name="tipoVivienda"  >
+                                        <option value="0"> --- </option>
+                                        {% for vivienda in viviendas %}
+                                        <option value="{{ vivienda.id }}"> {{ vivienda.tipoVivienda }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Condición de ocupación de la vivienda</label>
+                                    <select class="form-control" name="ocupaVivienda"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for h in ocupaViviendas %}
+                                        <option value="{{ h.id }}"> {{ h.ocupaVivienda }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Fecha desde que reside en el municipio</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <select name="diavive" id="dobdia" class="form-control"></select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select name="mesvive" id="dobmes" class="form-control"></select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select name="anovive" id="dobano" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade"id="generales">
+                <div class="col-md-12 form lab">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>Genero</label>
+                                    <select class="form-control" name="genero"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for h in genero %}
+                                        <option value="{{ h.0 }}"> {{ h.1 }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Condicion Sexual</label>
+                                    <select class="form-control" name="sexo"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for h in condicion %}
+                                        <option value="{{ h.id }}"> {{ h.condicion }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Pertenencia Etnica</label>
+                                    <select class="form-control" name="etnia"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for etnia in etnias %}
+                                        <option value="{{ etnia.id }}"> {{ etnia.etnia }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Discapacidad</label>
+                                    <select class="form-control" name="discapacidad"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for disc in discapacidad %}
+                                        <option value="{{ disc.id }}"> {{ disc.discapacidad }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Régimen de Salud</label>
+                                    <select class="form-control" name="regimen"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for reg in regimen %}
+                                        <option value="{{ reg.id }}"> {{ reg.regimen }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Eps</label>
+                                    <select class="form-control" name="eps"  >
+                                        <option value="0"> -------------- </option>
+                                        {% for eps in epss %}
+                                        <option value="{{ eps.id }}"> {{ eps.eps }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Pertenece a familias en acción</label>
+                                    <select class="form-control" name="faccion"  >
+                                        <option> -------------- </option>
+                                        <option value="1">Si </option>
+                                        <option value="0">No </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade"id="educacion">
+                <div class="col-md-12 form lab">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Máximo nivel Educativo alcanzado</label>
+                                    <select class="form-control" name="educacion"  >
+                                        <option value="0">----------------------</option>
+                                        {% for educa in educacion %}
+                                        <option value="{{ educa.id }}">{{ educa.nivel }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-7">
+                                    <label>Institución educativa donde estudia actualmente</label>
+                                    <select class="form-control" name="instituto"  >
+                                        <option value="0">----------------------</option>
+                                        {% for institucion in instituciones %}
+                                        <option value="{{ institucion.id }}">{{ institucion.institucion }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <a href="#"><button class="btn btn-success" id="btnReview">Siguiente <i class="fa fa-arrow-right" aria-hidden="true"></i></button></a>
+                <button type="submit" class="btn btn-success">Crear</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script>window.jQuery || document.write('<script src="{% static 'js/jquery.min.js' %}"><\/script>')</script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+        <script type="text/javascript">
+            $('#btnReview').click(function(){
+                $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            });
+        </script>
+        <script>
+            $('#depart').on('change',inicio);
+            function inicio() {
+                var id = $(this).val();
+                $.ajax({
+                    data : {'id':id},
+                    url: 'ciudadesAjax',
+                    type: 'get',
+                    success: function(data){
+                        var select = $('#ciud').html("<option value='0'>-- Seleccione una ciudad -- </option>");
+                        for (var i = 0; i < data.length ; i++){
+                            select.append('<option value="'
+                                + data[i].pk
+                                + '">'
+                                + data[i].fields.ciudad
+                                + '</option>' );
+                        }
+                    }
+                })
+            }
+        </script>
+        <script>
+            $('#dep').on('change',inicio);
+            function inicio() {
+                var id = $(this).val();
+                $.ajax({
+                    data : {'id':id},
+                    url: 'ciudadesAjax',
+                    type: 'get',
+                    success: function(data){
+                        var select = $('#ciu').html("<option value='0'>-- Seleccione una ciudad -- </option>");
+                        for (var i = 0; i < data.length ; i++){
+                            select.append('<option value="'
+                                + data[i].pk
+                                + '">'
+                                + data[i].fields.ciudad
+                                + '</option>' );
+                        }
+                    }
+                })
+            }
+        </script>
+        <script src="{% static 'js/dobPicker.min.js' %}"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $.dobPicker({
+                    daySelector: '#dobday', /*   */
+                    monthSelector: '#dobmonth', /*   */
+                    yearSelector: '#dobyear', /*   */
+                    dayDefault: 'Día', /* Optional */
+                    monthDefault: 'Mes', /* Optional */
+                    yearDefault: 'Año', /* Optional */
+                    minimumAge: 0, /* Optional */
+                    maximumAge: 100 /* Optional */
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $.dobPicker({
+                    daySelector: '#dobdia', /*   */
+                    monthSelector: '#dobmes', /*   */
+                    yearSelector: '#dobano', /*   */
+                    dayDefault: 'Día', /* Optional */
+                    monthDefault: 'Mes', /* Optional */
+                    yearDefault: 'Año', /* Optional */
+                    minimumAge: 0, /* Optional */
+                    maximumAge: 100 /* Optional */
+                });
+            });
+        </script>
+    </body>
+</html>

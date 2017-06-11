@@ -1,0 +1,123 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}Datos basicos{% endblock %}
+{% block content %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-md-12">
+            <h1 class="page-header">Subir documentos de soporte </h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <form method="post" name="formulario" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="tab-content">
+                <div class="tab-pane fade in active">
+                    <div class="col-md-12 form lab">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group inline-block">
+                                        <label>Documento de identidad: </label>
+                                        <input type="file" accept="application/pdf" name="img1" id="img1" onchange="comprobar(this)" required>
+                                    </div>
+                                    {% if beneficiario.cabeza == True %}
+                                    <div class="form-group">
+                                        <label>Certificado PVCA: </label>
+                                        <input type="file" accept="application/pdf" name="img2" id="img2" onchange="comprobard(this)" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Recibo servicio publico: </label>
+                                        <input type="file" accept="application/pdf" name="img3" id="img3" onchange="comprobart(this)" required>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-success">Subir archivos</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'js/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        function comprobar(f) {
+            var extension = f.value.split('.').pop().toLowerCase();
+            var input = $("#img1")
+            if (extension != "pdf"){
+                swal({
+                    title: "Error!",
+                    text: "Solo se permiten archivos PDF!",
+                    type: "error",
+                    confirmButtonText: "Entendido",
+                });
+                input.replaceWith(input.val('').clone(true));
+                document.formulario.img2.required = false;
+                document.formulario.img2.required = false;
+
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        function comprobart(f) {
+            var extension = f.value.split('.').pop().toLowerCase();
+            var input = $("#img3")
+            if (extension != "pdf"){
+                swal({
+                    title: "Error!",
+                    text: "Solo se permiten archivos PDF!",
+                    type: "error",
+                    confirmButtonText: "Entendido",
+                });
+                input.replaceWith(input.val('').clone(true));
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        function comprobard(f) {
+            var extension = f.value.split('.').pop().toLowerCase();
+            var input = $("#img2")
+            if (extension != "pdf"){
+                swal({
+                    title: "Error!",
+                    text: "Solo se permiten archivos PDF!",
+                    type: "error",
+                    confirmButtonText: "Entendido",
+                });
+                input.replaceWith(input.val('').clone(true));
+            }
+        }
+    </script>
+
+
+{% endblock %}

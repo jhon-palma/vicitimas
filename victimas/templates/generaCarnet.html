@@ -1,0 +1,72 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% block title %}Grupo Familiar{% endblock %}
+{% block content %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    {% for message in messages %}
+        {% if 'success' in message.tags %}
+            <div class="alert alert-success">
+                <a class="close" href="#" data-dismiss="alert">×</a>
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endfor %}
+    {% for message in messages %}
+        {% if 'warning' in message.tags %}
+            <div class="alert alert-danger">
+                <a class="close" href="#" data-dismiss="alert">×</a>
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endfor %}
+    <label>Digite el numero de cédula de la persona cabeza de hogar</label>
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input type="number" name="buscalo" id="buscalo" class="form-control" required/>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search fa-lg"></i></button>
+        </div>
+    </form>
+    {% if msg %}
+        <div class="alert alert-danger"> {{ msg }} </div>
+    {% endif %}
+    {% if beneficiarios %}
+        <h1>Grupo familiar <a href="{% url 'beneficiario:imprimirCarnet'%}?grupo={{ beneficiarios.first.documentoCabeza}}"><i class="fa fa-print" aria-hidden="true"></i></a></h1>
+        <table class="table table-bordered alt">
+            <thead>
+                <tr>
+                    <th class="active col-sm-1">Documento</td>
+                    <th class="active col-sm-2">Nombres y apellidos </td>
+                    <th class="active col-sm-2">Parentesco </td>
+                    <th class="active col-sm-2">Carnet </td>
+                    <th class="active col-sm-2">Fecha Expedición </td>
+                    <th class="active col-sm-2">Fecha Vencimiento </td>
+                    <th class="active col-sm-1">Acción</td>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for carnet in cnt %}
+                <tr>
+                    <td>{{ carnet.beneficiario.numeroDocumento }}</td>
+                    <td>{{ carnet.beneficiario.nombreUno|capfirst }} {{ carnet.beneficiario.nombreDos|capfirst }} {{ carnet.beneficiario.apellidoUno|capfirst }} {{ carnet.beneficiario.apellidoDos|capfirst }}</td>
+                    <td>{{ carnet.beneficiario.parentesco.parentesco }}</td>
+                    <td>{{ carnet.codigo }}</td>
+                    <td>{{ carnet.fechaExpide }}</td>
+                    <td>{{ carnet.fechaVence }}</td>
+                    <td><a href="{% url 'beneficiario:imprimirCarnet'%}?beneficiario={{ carnet.beneficiario.numeroDocumento}}"><i class="fa fa-print" aria-hidden="true"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+</div>
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script>window.jQuery || document.write('<script src="{% static 'js/jquery.min.js' %}"><\/script>')</script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+
+{% endblock %}

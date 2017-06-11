@@ -1,0 +1,206 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% block title %}Datos adicionales de la Residencia{% endblock %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-md-12">
+            <h1 class="page-header">Datos adicionales de la Residencia</h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <form method="post" name="formulario">
+            {% csrf_token %}
+            <div class="tab-content">
+                <div class="tab-pane fade in active">
+                    <div class="col-md-12 form lab">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Material predominante de las paredes exteriores: </label>
+                                        <select class="form-control" name="mpared" required>
+                                            <option value=""> -------------------------- </option>
+                                            {% for x in mparedes %}
+                                            <option value="{{ x.id }}" {% if hogar.materialVivienda_id == x.id %} selected {% endif %}> {{ x.material }} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Material predominante de los pisos: </label>
+                                        <select class="form-control" name="mpisos" required>
+                                            <option value=""> -------------------------- </option>
+                                            {% for x in mpisos %}
+                                            <option value="{{ x.id }}" {% if hogar.materialPiso_id == x.id %} selected {% endif %}> {{ x.material }} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label>La unidad de vivienda cuenta con servicios públicos de:</label>
+                                            {% for h in servicios %}
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="servicio[]" id="{{ h.id }}" value="{{ h.id}}" {% for x in hc %} {% if x.id == h.id %} checked {% endif %} {% endfor %}/>{{ h.servicioPublico }}
+                                                    </label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label>Cómo eliminan principalmente la basura en esta unidad de vivienda</label>
+                                            <select class="form-control" name="basura" required>
+                                                <option value=""> -------------- </option>
+                                                {% for h in basuras %}
+                                                <option value="{{ h.id }}" {% if hogar.basura_id == h.id %} selected {% endif %}> {{ h.metodo }} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Cuántos cuartos incluyendo sala-comedor tiene esta unidad de vivienda</label>
+                                        <input class="form-control" name="cuartos" type="number" value="{{ hogar.cuartos }}" autocomplete="off" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label>Cuántos grupos de personas que cocinan por separado hay en esta unidad de vivienda</label>
+                                            <input class="form-control" name="grupos" type="number" value="{{ hogar.grupos }}" autocomplete="off" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Incluyendo sala-comedor cuántos cuartos en total ocupa este hogar en forma excluxiva</label>
+                                        <input class="form-control" name="cocupa"type="number" value="{{ hogar.cuartosOcupa}}" autocomplete="off" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Cuántos de estos cuartos usa ente hogar para dormir</label>
+                                        <input class="form-control" name="cduerme" type="number" value="{{ hogar.cuartosDuerme }}" autocomplete="off" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn btn-success" id="checkBtn">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        $('#departamento').on('change',inicio);
+        function inicio() {
+            var id = $(this).val();
+            $.ajax({
+                data : {'id':id},
+                url: '{% url "beneficiario:ciudadesAjax" %}',
+                type: 'get',
+                success: function(data){
+                    var select = $('#ciudad').html("<option value='0'>-- Seleccione una ciudad -- </option>");
+                    for (var i = 0; i < data.length ; i++){
+                        select.append('<option value="'
+                            + data[i].pk
+                            + '">'
+                            + data[i].fields.ciudad
+                            + '</option>' );
+                    }
+                }
+            })
+            $("#ciudad").removeAttr("disabled");
+        }
+    </script>
+    <script src="{% static 'js/dobPicker.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.dobPicker({
+                daySelector: '#dobday', /*   */
+                monthSelector: '#dobmonth', /*   */
+                yearSelector: '#dobyear', /*   */
+                dayDefault: 'Día', /* Optional */
+                monthDefault: 'Mes', /* Optional */
+                yearDefault: 'Año', /* Optional */
+                minimumAge: 0, /* Optional */
+                maximumAge: 100 /* Optional */
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.dobPicker({
+                daySelector: '#dobdia', /*   */
+                monthSelector: '#dobmes', /*   */
+                yearSelector: '#dobano', /*   */
+                dayDefault: 'Día', /* Optional */
+                monthDefault: 'Mes', /* Optional */
+                yearDefault: 'Año', /* Optional */
+                minimumAge: 0, /* Optional */
+                maximumAge: 100 /* Optional */
+            });
+        });
+    </script>
+    <script>
+        function funcion(value)
+        {
+            if(value=="1" || value==true){
+                document.getElementById("departpa").disabled=false;
+                document.getElementById("inicior").disabled=false;
+            }
+            else{
+                document.getElementById("departpa").disabled=true;
+                document.getElementById("inicior").disabled=true;
+                document.getElementById("ciudpa").disabled=true;
+            }
+        }
+        window.onload = funcion;
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#checkBtn').click(function() {
+                checked = $("input[type=checkbox]:checked").length;
+
+                if(!checked) {
+                    alert("You must check at least one checkbox.");
+                    return false;
+                }
+
+            });
+        });
+</script>
+{% endblock %}

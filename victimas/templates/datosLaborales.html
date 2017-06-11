@@ -1,0 +1,215 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% block title %}Datos Laborales{% endblock %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-md-12">
+            <h1 class="page-header">Datos Laborales</h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <form method="post" name="formulario">
+            {% csrf_token %}
+            <div class="tab-content">
+                <div class="tab-pane fade in active">
+                    <div class="col-md-12 form lab">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Profesión</label>
+                                        <select class="form-control" name="profesion" id="profesion" onchange="llamamodal(this.value);">
+                                            <option value="0">--------------------</option>
+                                            {% for x in profesiones %}
+                                            <option value="{{ x.id }}" {% if ben.profesion.id == x.id %} selected {% endif %}>{{ x.profesion }}</option>
+                                            {% endfor %}
+                                            <option value="01">Agregar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Actividad en el último mes</label>
+                                        <select class="form-control" name="actividad" id="actividad">
+                                            <option value="0">--------------------</option>
+                                            {% for x in actividades %}
+                                            <option value="{{ x.id }}"{% if ben.actividadMes.id == x.id %} selected {% endif %}>{{ x.actividad }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="display: none;" id="oculto" >
+                                    <div class="form-group">
+                                        <label>¿Cuántas semanas lleva buscando trabajo? </label>
+                                        <input type="number" name="semanas" id="semanas" min="0" max="60" step="1" value="{{ ben.semanas }}" class="form-control input-md" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Percibe algún tipo de ingresos</label>
+                                        <select class="form-control" name="percibe" id="percibe">
+                                            <option value="9"> -- </option>
+                                            <option value="True" {% if ben.percibe == True %} selected {% endif %}>Si</option>
+                                            <option value="False" {% if ben.percibe == False %} selected {% endif %}>No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" style="display: none;" id="ocultoi">
+                                    <div class="form-group">
+                                        <label>Total ingresos mensuales</label>
+                                        <input class="form-control" type="number" name="ingresos" id="ingresos" value="{{ ben.ingresos }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn btn-success">Crear</button>
+                </div>
+            </div>
+        </form>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Crear profesión</h4>
+                    </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Profesión</label>
+                                <input class="form-control pcapital" name="profesionp" id="profesionp" placeholder="Profesión" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Código</label>
+                                <input class="form-control pcapital" name="codigop" id="codigop" placeholder="codigo" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="grabar();">Crear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        $('#actividad').on('change', habilita);
+        function habilita()
+        {
+            if (document.formulario.percibe.options[2].selected == true ){
+                $("#ocultoi ").removeAttr("style");
+            }else {
+                $("#ocultoi").css("display",'none');
+            }
+        }
+    </script>
+    <script>
+        $('#actividad').on('change', habilitas);
+        function habilitas()
+        {
+            if (document.formulario.actividad.options[3].selected == true ){
+                $("#oculto").removeAttr("style");
+            }else {
+                $("#oculto").css("display",'none');
+            }
+        }
+    </script>
+    <script>
+        $('#percibe').on('change', habilita);
+        function habilita()
+        {
+            if (document.formulario.percibe.options[1].selected == true ){
+                $("#ocultoi").removeAttr("style");
+            }else {
+                $("#ocultoi").css("display",'none');
+            }
+        }
+    </script>
+
+    <script>
+        function llamamodal(value)
+        {
+            if(value=="01"){
+                $('#myModal').modal('show');
+            }
+            else{
+                $('#myModal').modal('hide');
+            }
+        }
+    </script>
+    <script>
+        function grabar()
+        {
+            var codigop = $("#codigop").val();
+            var profesionp = $("#profesionp").val();
+            $.ajax({
+                data : { 'codigo': codigop, 'profesion': profesionp },
+                url: '{% url "beneficiario:profesion_nueva" %}',
+                type: 'get',
+            });
+        }
+    </script>
+    <script>
+        if (document.addEventListener){
+            window.addEventListener('load',llamamodal,false);
+            window.addEventListener('load',habilita,false);
+            window.addEventListener('load',habilitas,false);
+        } else {
+            window.attachEvent('onload',llamamodal);
+            window.attachEvent('onload',habilita);
+            window.attachEvent('onload',habilitas);
+        }
+    </script>
+    <script>
+        $(function () {
+            $(".js-create-book").click(function () {
+                $.ajax({
+                    url: '/books/create/',
+                    type: 'get',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $("#modal-book").modal("show");
+                    },
+                    success: function (data) {
+                        $("#modal-book .modal-content").html(data.html_form);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+|

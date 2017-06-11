@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>Carnet</title>
+        <style>
+        @page{
+            size: 21.6cm 27.9cm;
+            margin: -4px -6px;
+
+        }
+        table{
+            margin-top: 1px;
+            margin-bottom: 0px;
+            margin-right: 0px;
+            margin-left: 0px;
+            border: 1px solid;
+            table-layout: fixed;
+        }
+        td{
+            padding-top: 0.5px;
+        }
+        .logo{
+            width: inherit;
+            height: auto;
+        }
+        .titulo1{
+            text-align: center;
+            vertical-align: text-top;
+            font: small-caps 100% serif;
+        }
+        .titulo2{
+            font-size: 16px;
+            text-align: center;
+        }
+        .subtitulo{
+            text-align: center;
+            font-weight: 700;
+        }
+        .detalle{
+            font-size: 15px;
+        }
+        .detalles{
+            font-size: 15px;
+            text-align: center;
+        }
+        .detallet{
+            font-size: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .firma{
+            font-size: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-style: italic;
+        }
+        </style>
+    </head>
+    <body>
+        {% if beneficiarios %}
+        {% for usr in beneficiarios %}
+        <table style="width:100%">
+            <tr>
+                <td class="logo" ><img src="{% static 'images/logoSisben.png' %}"/></td>
+                <td class="titulo1" colspan="3" >Sistema de Identificación y Clasificación de Potenciales Beneficiarios para <br>Programas Sociales</td>
+                <td class="titulo2" colspan="4" style="border-left:1px solid #000000";>Este carnet es intransferible. Si es usado por otra persona, sera confiscado. En caso de perdida favor avisar a la administracion Municipal</td>
+            </tr>
+            <tr>
+                <td class="subtitulo" colspan="4"> GIRARDOT - CUNDINAMARCA </td>
+                <td class="detalles" colspan="2" style="border-left:1px solid #000000";>Fecha de Expedición</td>
+                <td class="detalles" colspan="2">Fecha de Vencimiento</td>
+            </tr>
+            <tr>
+                <td class="detalle" colspan="2">Carnet No.:</td>
+                <td class="detalle" colspan="2">{{ usr.codigo }}</td>
+                <td class="detallet" colspan="2" style="border-left:1px solid #000000";>{{ usr.fechaExpide|date:"d/m/Y" }}</td>
+                <td class="detallet" colspan="2">{{ usr.fechaVence|date:"d/m/Y" }}</td>
+            </tr>
+            <tr>
+                <td class="detalle" colspan="2">Fecha de nacimiento:</td>
+                <td class="detalle" colspan="2"> {{ usr.beneficiario.fechaNacimiento|date:"d/m/Y" }} </td>
+                <td style="border-left:1px solid #000000";></td>
+            </tr>
+            <tr>
+                <td class="detalle" colspan="2">Doc. de Identidad:</td>
+                <td class="detalle" colspan="2"> {{ usr.beneficiario.tipoDocumento.codigo }} N° {{ usr.beneficiario.numeroDocumento}}</td>
+                <td style="border-left:1px solid #000000";></td>
+            </tr>
+            <tr>
+                <td class="detalle">Nombre:</td>
+                <td class="detalle" colspan="3" style="text-transform: uppercase;" > {{ usr.beneficiario.apellidoUno }} {{ usr.beneficiario.apellidoDos }} {{ usr.beneficiario.nombreUno }} {{ usr.beneficiario.nombreDos }}</td>
+                <td class="detalles"colspan="4" style="border-left:1px solid #000000";>Firma Autorizada</td>
+
+            </tr>
+            <tr>
+                <td class="detalle" colspan="2">Programa:</td>
+                <td class="detalle" colspan="2"> PVCA</td>
+                <td class="firma"colspan="4" style="border-left:1px solid #000000";>DIEGO FERNANDO NUÑEZ B.</td>
+                <td class="firma"colspan="4" style="border-left:1px solid #000000";>DIRECTOR DEL SISBEN</td>
+            </tr>
+        </table>
+        {% endfor%}
+        {% endif %}
+    </body>
+</html>

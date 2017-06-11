@@ -1,0 +1,346 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}Detalle de Beneficiarios{% endblock %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        {% block mesages %}{% endblock %}
+        <div class="col-md-12">
+            <h1 class="page-header">Consulta de Beneficiarios</h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                    {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }} <a href="{% url 'beneficiario:datosBasicos' %}">Desea Registrarlo?</a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <label>Digite el número de cédula del beneficiario</label>
+        <form class="form-inline" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="number" name="search" class="form-control" required/>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search fa-lg"></i></button>
+            </div>
+        </form>
+        {% if beneficiario %}
+            <table class="table table-bordered alt">
+                <caption>Datos Básicos &nbsp<a align="rigth" href="{% url 'beneficiario:datosBasicosEditar' beneficiario.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></caption>
+                <tr>
+                    <th class="active" nowrap>Tipo Doc.</th>
+                    <td nowrap>{{ beneficiario.tipoDocumento.tipo }}</td>
+                    <th class="active" nowrap>N. Documento</th>
+                    <td nowrap>{{ beneficiario.numeroDocumento }}</td>
+                    <th class="active" nowrap>Código Unidad de víctimas</th>
+                    <td nowrap>{{ beneficiario.codigoUV }}</td>
+                </tr>
+                    <th class="active" nowrap>Nombres y apellidos </th>
+                    <td colspan="3" nowrap>{{ beneficiario.nombreUno|capfirst }} {{ beneficiario.nombreDos|capfirst }} {{ beneficiario.apellidoUno|capfirst }} {{ beneficiario.apellidoDos|capfirst }}</td>
+                    <th class="active" nowrap>Cabeza Hogar </th>
+                    <td nowrap>{% if beneficiario.cabeza == True %}
+                        Si
+                        {% else %}
+                        No {% endif %}</td>
+                </tr>
+                <tr>
+                    <th class="active" nowrap>Parentesco</th>
+                    <td nowrap>{{ beneficiario.parentesco.parentesco }}</td>
+                    <th class="active" nowrap>Documento Jefe</th>
+                    <td nowrap>{{ beneficiario.documentoCabeza }}</td>
+                    <th class="active" nowrap>Fecha de nacimiento</th>
+                    <td nowrap>{{ beneficiario.fechaNacimiento }}</td>
+
+                </tr>
+                <tr>
+                    <th class="active" nowrap>Trabaja al interior del hogar</th>
+                    <td nowrap>{% if beneficiario.tservicio == True %}
+                        Si
+                        {% else %}
+                        No {% endif %}</td>
+                    <th class="active" nowrap>Estado civil</th>
+                    <td nowrap>{{ beneficiario.estadoCivil.estadoCivil }}</td>
+                    <th class="active">Paga a otro miembro del hogar arriendo o alimentación</th>
+                    <td nowrap>{% if beneficiario.pagaOtro == True %}
+                        Si
+                        {% else %}
+                        No {% endif %}</td>
+
+                </tr>
+                <tr>
+                    <th class="active" nowrap>Email</th>
+                    <td nowrap>{{ beneficiario.email }}</td>
+                    <th class="active" nowrap>Teléfono</th>
+                    <td nowrap>{{ beneficiario.telefonoFijo}}</td>
+                    <th class="active" nowrap>Celular</th>
+                    <td nowrap>{{ beneficiario.telefonoCelular }}</td>
+                </tr>
+                <tr>
+                    <th class="active">Extranjero</th>
+                    <td nowrap>{% if beneficiario.extranjero == True %}
+                        Si
+                        {% else %}
+                        No {% endif %}</td>
+                </tr>
+            </table>
+
+            <table class="table table-bordered alt">
+                <caption>Datos de Caracterización &nbsp<a align="rigth" href="{% url 'beneficiario:datosCaracterizacionEditar' beneficiario.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></caption>
+                <tr>
+                    <th class="active">Genero</th>
+                    <td>{% if beneficiario.genero == 'H' %}
+                        Hombre
+                        {% else %}
+                        Mujer {% endif %}
+                    </td>
+                    <th class="active">Condición sexual</th>
+                    <td>{{ beneficiario.condicionSexual.condicion }}</td>
+                    <th class="active">Discapacidad </th>
+                    <td>{{ beneficiario.discapacidad.discapacidad }} </td>
+                </tr>
+                <tr>
+                    <th class="active">Detalle Discapacidad</th>
+                    <td>{{ beneficiario.detDiscapacidad }} </td>
+                    <th class="active">Régimen de salud</th>
+                    <td>{{beneficiario.regimen.regimen }}</td>
+                    <th class="active">EPS</th>
+                    <td>{{ beneficiario.eps.eps }}</td>
+                </tr>
+                <tr>
+                    <th class="active">Pertenencia Etnica</th>
+                    <td colspan="3">{{ beneficiario.perteneciaEtnica.etnia }}</td>
+                    {% if beneficiario.genero == 'M' %}
+                        <th class="active">Embarazada</th>
+                        <td>{% if beneficiario.embarazo == True %}
+                            Si
+                            {% else %}
+                            No
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th class="active">Familias en acción </th>
+                    <td>{% if beneficiario.familiasAccion == True %} Si {% else %} No {% endif %} </td>
+                </tr>
+            </table>
+
+            <table class="table table-bordered alt">
+                <caption>Datos de procedencia &nbsp<a align="rigth" href="{% url 'beneficiario:datosProcedenciaEditar' beneficiario.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></caption>
+                    <tr>
+                        <th class="active">Hecho Victimizante</th>
+                        <td colspan="5">{% for h in hechos %}{{ h.hecho.hecho }}, {% endfor%}</td>
+                    </tr>
+                    <tr>
+                        <th class="active">Ciudad de procedencia</th>
+                        <td>{{ beneficiario.ciudadProcedencia.ciudad }}</td>
+                        <th class="active">Fecha de declaración</th>
+                        <td>{{ beneficiario.fechaDeclara }}</td>
+                        <th class="active">Ciudad de declaración</th>
+                        <td>{{ beneficiario.ciudadDeclara.ciudad }}</td>
+                    </tr>
+                        <th class="active">Predio Abandonado</th>
+                        <td>{% if beneficiario.predioAbandonado == True %}
+                            Si
+                            {% else %}
+                            No {% endif %}</td>
+                        <th class="active">Ciudad del predio abandonado</th>
+                        <td>{{ beneficiario.ciudadPredio.ciudad }}</td>
+                        <th class="active">Inicio proceso de restitución</th>
+                        <td>{% if beneficiario.restitucionPredio == True %}
+                            Si
+                            {% else %}
+                            No {% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th class="active">Revictimizado </th>
+                        <td>{% if beneficiario.revictimizado == True %}
+                            Si
+                            {% else %}
+                            No {% endif %}</td>
+                    </tr>
+            </table>
+
+            <table class="table table-bordered alt">
+                <caption>Datos de Educación &nbsp<a align="rigth" href="{% url 'beneficiario:datosEducacionEditar' beneficiario.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></caption>
+                <tr>
+                    <th class="active">Nivel educativo</th>
+                    <td>{{ beneficiario.nivelEducativo.nivel }}</td>
+                    <th class="active">Estudia actualmente</th>
+                    <td>{% if beneficiario.estudiaActualmente == True %}
+                        Si
+                        {% else %}
+                        No {% endif %}</td>
+                    <th class="active">Ultimo año aprovado</th>
+                    <td>{{ beneficiario.ultimoAno }}</td>
+                </tr>
+                <tr>
+                    <th class="active">Institución Educativa </th>
+                    <td >{{ beneficiario.institucionEducativa.institucion}} </td>
+                    <th class="active">Kit Escolar</th>
+                    <td>{% if beneficiario.kitEscolar == True %}Si{% else %}No{% endif %}</td>
+                    <th class="active">Uniforme</th>
+                    <td>{% if beneficiario.uniforme == True %}Si{% else %}No{% endif %}</td>
+                </tr>
+                <tr>
+                    <th class="active">Otros estudios</th>
+                    <td colspan="5">{{ beneficiario.otrosEstudiosD }}</td>
+                </tr>
+            </table>
+
+            <table class="table table-bordered alt">
+                <caption>Datos Laborales &nbsp<a align="rigth" href="{% url 'beneficiario:datosLaboralesEditar' beneficiario.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></caption>
+                <tr>
+                    <th class="active">Profesión</th>
+                    <td>{{ beneficiario.profesion.profesion }}</td>
+                    <th class="active">Actividad en el último mes</th>
+                    <td>{{ beneficiario.actividadMes.actividad }}</td>
+                    <th class="active">{% if beneficiario.actividadMes.id == 3 %} Semanas buscando trabajo</th>
+                    <td> {{ beneficiario.semanas }}</td>{% endif %}
+                </tr>
+                <tr>
+                    <th class="active">Percibe algún tipo de ingresos</th>
+                    <td >{% if beneficiario.percibe == True %}Si{% else %}No{% endif %} </td>
+                    <th class="active">{% if beneficiario.percibe == True %} Total Ingresos </th>
+                    <td>$ {{ beneficiario.ingresos|floatformat:"0"|intcomma }}</td>{% endif %}
+                </tr>
+            </table>
+
+            <table class="table table-bordered alt">
+                <caption>Datos de Residencia &nbsp<a align="rigth" href="{% url 'beneficiario:datosResidenciaEditar' beneficiario.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></caption>
+                <tr>
+                    <th class="active">Ciudad de residencia</th>
+                    <td>{{ hogar.ciudadResidencia.ciudad }}</td>
+                    <th class="active">Dirección</th>
+                    <td>{{ hogar.direccion }}</td>
+                    <th class="active">Barrio</th>
+                    <td>{{ hogar.barrio }}</td>
+                </tr>
+                    <th class="active">Estrato </th>
+                    <td>{{ hogar.estratoPredio }} </td>
+                    <th class="active">Zona </th>
+                    <td>{% if hogar.zonaPredio == 'U' %}
+                        Urbano
+                        {% elif hogar.zonaPredio == 'R' %}
+                        Rural {% else %}{% endif %}</td>
+
+                    <th class="active">Fecha de residencia</th>
+                    <td>{{ hogar.fechaResidencia }}</td>
+                </tr>
+                <tr>
+                    <th class="active">Tipo de Vivienda </th>
+                    <td colspan="2">{{ hogar.tipoVivienda.tipoVivienda }} </td>
+                    <th class="active">Condición de ocupación</th>
+                    <td colspan="2">{{ hogar.ocupaVivienda.ocupaVivienda }}</td>
+                </tr>
+            </table>
+
+            <table class="table table-bordered alt">
+                <caption>Datos adicionales de Residencia &nbsp<a align="rigth" href="{% url 'beneficiario:datosResidenciaMaterialEditar' beneficiario.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></caption>
+                <tr>
+                    <th class="active" colspan="2">Material predomintante de las paredes exteriores</th>
+                    <td>{{ hogar.materialVivienda.material }}</td>
+                    <th class="active" colspan="2">Material predomintante de los pisos</th>
+                    <td>{{ hogar.materialPiso.material }}</td>
+                </tr>
+                <tr>
+                    <th class="active">Servicios publicos de la vivienda</th>
+                    <td colspan="5">{% for h in hogar.servicioPublico.all %}{{ h.servicioPublico }},&nbsp   {% endfor%}</td>
+                </tr>
+                <tr>
+                    <th class="active">Como Eliminan las basuras </th>
+                    <td>{{ hogar.basura.metodo }} </td>
+                    <th class="active" colspan="3">Cuántos cuartos incluyendo sala-comedor tiene esta unidad de vivienda </th>
+                    <td>{{ hogar.cuartos }}</td>
+                </tr>
+                <tr>
+                    <th class="active" colspan="2">Cuántos grupos de personas que cocinan por separado hay en esta unidad de vivienda</th>
+                    <td >{{ hogar.grupos }} </td>
+                    <th class="active" colspan="2">Incluyendo sala-comedor cuántos cuartos en total ocupa este hogar en forma excluxiva</th>
+                    <td >{{ hogar.cuartosOcupa }}</td>
+                </tr>
+                <tr>
+                    <th class="active" colspan="2">Cuántos de estos cuartos usa ente hogar para dormir</th>
+                    <td >{{ hogar.cuartosDuerme }} </td>
+                </tr>
+            </table>
+            <table class="table table-bordered alt">
+                <caption>Datos adicionales de Residencia 2&nbsp<a align="rigth" href="{% url 'beneficiario:datosResidenciaMatdosEdit' beneficiario.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></caption>
+                <tr>
+                    <th class="active" colspan="3">El servicio sanitario que utilizan es</th>
+                    <td colspan="3">{{ hogar.inodoro }}</td>
+                </tr>
+                <tr>
+                    <th class="active" colspan="3">Dónde se encuentra el sanitario que usan las personas de este hogar</th>
+                    <td colspan="3">{{ hogar.ubicaInodoro }}</td>
+                </tr>
+                <tr>
+                    <th class="active">El servicio sanitario es:</th>
+                    <td colspan="2">{{ hogar.usoInodoro }}</td>
+                    <th class="active" colspan="2">Cuántos sanitarios tiene este hogar </th>
+                    <td>{{ hogar.cantidadInodoro }} </td>
+                </tr>
+                <tr>
+                    <th class="active" colspan="2">Tiene ducha o regadera conectada al acueducto:</th>
+                    <td>{% if hogar.ducha == True %} Si {% else %} No {% endif %}</td>
+                    <th class="active" colspan="2">El agua para consumo la obtienen principalmente de</th>
+                    <td>{{ hogar.origenAgua }}</td>
+                </tr>
+                <tr>
+                    <th class="active" colspan="2">Cuantos días a la semana llega el agua</th>
+                    <td >{{ hogar.diasAgua }}</td>
+                    <th class="active" colspan="2">Cuantas horas al día llega el agua</th>
+                    <td >{{ hogar.horasAgua }}</td>
+                </tr>
+            </table>
+            <table class="table table-bordered alt">
+                <caption>Datos adicionales del hogar 3&nbsp<a align="rigth" href="{% url 'beneficiario:datosCocinaEditar' beneficiario.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></caption>
+                <tr>
+                    <th class="active" colspan="3">En donde preparan los alimentos las personas de este hogar:</th>
+                    <td colspan="3">{{ hogar.preparar }}</td>
+                </tr>
+                <tr>
+                    <th class="active" colspan="3">La cocina o sitio para preparar alimentos es:</th>
+                    <td colspan="3">{{ hogar.cocina }}</td>
+                </tr>
+                <tr>
+                    <th class="active" colspan="3">Cuál combustible o fuente de energía utilizan principalmente para cocinar:</th>
+                    <td colspan="3">{{ hogar.combustibleCocina }}</td>
+                </tr>
+                <tr>
+                    <th class="active">Qué tipo de alumbrado utilizan principalmente:</th>
+                    <td>{{ hogar.alumbrado }}</td>
+                    <th class="active" >El servicio telefónico es:</th>
+                    <td>{{ hogar.stelefono }}</td>
+                    <th class="active">Total de personas en el hogar:</th>
+                    <td >{{ hogar.totalPersonas }}</td>
+                </tr>
+                <tr>
+                    <th class="active">El hogar cuenta con los siguientes bienes o servicios:</th>
+                    <td colspan="5">{% for h in hogar.bienes.all %}{{ h.bienes }},&nbsp   {% endfor%}</td>
+                </tr>
+            </table>
+
+
+        {% endif %}
+    </div>
+{% endblock %}

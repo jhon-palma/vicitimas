@@ -1,0 +1,136 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% block title %}Grupo Familiar{% endblock %}
+{% block content %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+        <h1>Grupo familiar Activar carnet </h1>
+        <table class="table table-bordered alt">
+            <thead>
+                <tr>
+                    <th class="active col-sm-1">Documento</td>
+                    <th class="active col-sm-2">Nombres y apellidos </td>
+                    <th class="active col-sm-2">Parentesco </td>
+                    <th class="active col-sm-2">Fecha Expedición </td>
+                    <th class="active col-sm-2">Fecha Vencimiento </td>
+                </tr>
+            </thead>
+            <tbody>
+                <form method="post" name="formulario" id="formulario_basico">
+                    {% csrf_token %}
+                    <div class="col-md-4 sinpadding">
+                        <div class="form-group">
+                            <label>Fecha de expedición</label>
+                            <!---<input class="form-control" type="text" name="fechaN" value="{{ datos.fechaN|date:"d/m/Y" }}" placeholder="DD/MM/AAAA">-->
+                            <div class="row">
+                                <div class="col-md-3 sinpadding">
+                                    <select name="diaexp" id="dobday" class="form-control" required></select>
+                                </div>
+                                <div class="col-md-5">
+                                    <select name="mesexp" id="dobmonth" class="form-control" required></select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select name="anoexp" id="dobyear" class="form-control" required onchange="funcionx()"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 sinpadding">
+                        <div class="form-group">
+                            <label>Fecha de vencimiento</label>
+                            <!---<input class="form-control" type="text" name="fechaN" value="{{ datos.fechaN|date:"d/m/Y" }}" placeholder="DD/MM/AAAA">-->
+                            <div class="row">
+                                <div class="col-md-3 sinpadding">
+                                    <select name="diaven" id="dobdia" class="form-control" required></select>
+                                </div>
+                                <div class="col-md-5">
+                                    <select name="mesven" id="dobmes" class="form-control" required></select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select name="anoven" id="dobano" class="form-control" required onchange="funciony()"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% for beneficiario in beneficiarios %}
+                <tr>
+                    <td>{{ beneficiario.numeroDocumento }}</td>
+                    <td>{{ beneficiario.nombreUno|capfirst }} {{ beneficiario.nombreDos|capfirst }} {{ beneficiario.apellidoUno|capfirst }} {{ beneficiario.apellidoDos|capfirst }}</td>
+                    <td>{{ beneficiario.parentesco.parentesco }}</td>
+                    <td id="{{ beneficiario.numeroDocumento }}"></td>
+                    <td id="1{{ beneficiario.numeroDocumento }}"></td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+            <button type="submit" class="btn btn-success">Activar</button>
+
+</div>
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script>window.jQuery || document.write('<script src="{% static 'js/jquery.min.js' %}"><\/script>')</script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+    <script src="{% static 'js/dobPicker.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $.dobPicker({
+                daySelector: '#dobday', /*   */
+                monthSelector: '#dobmonth', /*   */
+                yearSelector: '#dobyear', /*   */
+                dayDefault: 'Día', /* Optional */
+                monthDefault: 'Mes', /* Optional */
+                yearDefault: 'Año', /* Optional */
+                minimumAge: 0, /* Optional */
+                maximumAge: 100 /* Optional */
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.dobPicker({
+                daySelector: '#dobdia', /*   */
+                monthSelector: '#dobmes', /*   */
+                yearSelector: '#dobano', /*   */
+                dayDefault: 'Día', /* Optional */
+                monthDefault: 'Mes', /* Optional */
+                yearDefault: 'Año', /* Optional */
+                minimumAge: 0, /* Optional */
+                maximumAge: 10 /* Optional */
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+    function funcionx(){
+
+        var dia = document.getElementById("dobday").value;
+        var mes = document.getElementById("dobmonth").value;
+        var ano = document.getElementById("dobyear").value;
+        {% for beneficiario in beneficiarios %}
+        document.getElementById("{{ beneficiario.numeroDocumento }}").innerHTML = dia.concat("/",mes,"/",ano);
+        {% endfor %}
+
+    }
+    </script>
+    <script type="text/javascript">
+    function funciony(){
+
+        var dia = document.getElementById("dobdia").value;
+        var mes = document.getElementById("dobmes").value;
+        var ano = document.getElementById("dobano").value;
+
+        {% for beneficiario in beneficiarios %}
+        var c = "{{ beneficiario.numeroDocumento }}";
+        var na = "1";
+        var y = na.concat(c);
+        document.getElementById(y).innerHTML = dia.concat("/",mes,"/",ano);
+        {% endfor %}
+
+    }
+    </script>
+{% endblock %}

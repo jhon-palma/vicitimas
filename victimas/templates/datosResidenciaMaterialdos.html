@@ -1,0 +1,234 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% block title %}Datos adicionales de la Residencia{% endblock %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-md-12">
+            <h1 class="page-header">Datos adicionales de la Residencia</h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <form method="post" name="formulario">
+            {% csrf_token %}
+            <div class="tab-content">
+                <div class="tab-pane fade in active">
+                    <div class="col-md-12 form lab">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>El servicio sanitario que utilizan es:<br> &nbsp</label>
+                                        <select class="form-control" name="sanitario" id="sanitario" required onchange="funcion(this.value)">
+                                            <option value=""> ---------------------------- </option>
+                                            <option value="No tiene"{% if hogar.inodoro == 'No tiene' %}selected {% endif %}> No tiene </option>
+                                            <option value="Inodoro con conexión a alcantarillado"{% if hogar.inodoro == 'Inodoro con conexión a alcantarillado' %}selected {% endif %}> Inodoro con conexión a alcantarillado </option>
+                                            <option value="Inodoro con conexión a pozo séptico"{% if hogar.inodoro == 'Inodoro con conexión a pozo séptico' %}selected {% endif %}> Inodoro con conexión a pozo séptico </option>
+                                            <option value="Inodoro sin conexión a alcantarillado ni a pozo séptico"{% if hogar.inodoro == 'Inodoro sin conexión a alcantarillado ni a pozo séptico' %}selected {% endif %}> Inodoro sin conexión a alcantarillado ni a pozo séptico</option>
+                                            <option value="Letrina, bajamar"{% if hogar.inodoro == 'Letrina, bajamar' %}selected {% endif %}> Letrina, bajamar </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="display:none;" id="oculto1">
+                                    <div class="form-group">
+                                        <label>Dónde se encuentra el sanitario que usan las personas de este hogar:</label>
+                                        <select class="form-control" name="ubica" id="ubica">
+                                            <option value=""> -------------------------- </option>
+                                            <option value="Dentro de la unidad de vivienda"{% if hogar.ubicaInodoro == 'Dentro de la unidad de vivienda' %}selected {% endif %}>Dentro de la unidad de vivienda</option>
+                                            <option value="Fuera de la unidad de vivienda"{% if hogar.ubicaInodoro == 'Fuera de la unidad de vivienda' %}selected {% endif %}>Fuera de la unidad de vivienda</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="display:none;" id="oculto2">
+                                    <div class="form-group">
+                                        <label>El servicio sanitario es:<br>&nbsp</label>
+                                        <select class="form-control" name="usaInodoro" id="usaInodoro">
+                                            <option value=""> -------------------------- </option>
+                                            <option value="Del uso exclusivo del hogar"{% if hogar.usoInodoro == 'Del uso exclusivo del hogar' %}selected {% endif %}>Del uso exclusivo del hogar</option>
+                                            <option value="Compartido con otros hogares"{% if hogar.usoInodoro == 'Compartido con otros hogares' %}selected {% endif %}>Compartido con otros hogares</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row">
+                                    <div class="col-md-4" style="display:none;" id="oculto3">
+                                        <div class="form-group">
+                                            <label>Cuántos sanitarios tiene este hogar:<br>&nbsp</label>
+                                            <input class="form-control" name="cinodoro" type="number" value="{{ hogar.cantidadInodoro }}" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Tiene ducha o regadera conectada al acueducto:</label>
+                                            <select class="form-control" name="ducha" required>
+                                                <option value=""> -------------------------- </option>
+                                                <option value="True"{% if hogar.ducha == True %}selected {% endif %}>Si</option>
+                                                <option value="False"{% if hogar.ducha == False %}selected {% endif %}>No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label>El agua para consumo la obtienen principalmente de:</label>
+                                            <select class="form-control" name="obtagua" id="obtagua" required onchange="funciona(this.value)">
+                                                <option value=""> ------------------------ </option>
+                                                <option value="Acueducto"{% if hogar.origenAgua == 'Acueducto' %}selected {% endif %}> Acueducto </option>
+                                                <option value="Pozo con bomba"{% if hogar.origenAgua == 'Pozo con bomba' %}selected {% endif %}> Pozo con bomba </option>
+                                                <option value="Pozo sin bomba, jagüey"{% if hogar.origenAgua == 'Pozo sin bomba, jagüey' %}selected {% endif %}> Pozo sin bomba, jagüey </option>
+                                                <option value="Agua lluvia"{% if hogar.origenAgua == 'Agua lluvia' %}selected {% endif %}> Agua lluvia </option>
+                                                <option value="Rio, quebrada, manantial, nacimiento"{% if hogar.origenAgua == 'Rio, quebrada, manantial, nacimiento' %}selected {% endif %}> Rio, quebrada, manantial, nacimiento </option>
+                                                <option value="Pila Pública"{% if hogar.origenAgua == 'Pila Pública' %}selected {% endif %}> Pila Pública </option>
+                                                <option value="Carrotanque"{% if hogar.origenAgua == 'Carrotanque' %}selected {% endif %}> Carrotanque </option>
+                                                <option value="Aguatero"{% if hogar.origenAgua == 'Aguatero' %}selected {% endif %}> Aguatero </option>
+                                                <option value="Donación"{% if hogar.origenAgua == 'Donación' %}selected {% endif %}> Donación </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-4" style="display:none;" id="oculto4">
+                                            <label>El agua llega al hogar los siete días de la semana?</label>
+                                            <select class="form-control" name="dllega" id="dllega" required onchange="funcions(this.value)">
+                                                <option value=""> -------------------------- </option>
+                                                <option value="True"{% if hogar.llegaAgua == True %}selected {% endif %}>Si</option>
+                                                <option value="False"{% if hogar.llegaAgua == False %}selected {% endif %}>No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5" style="display:none;" id="oculto5">
+                                        <div class="form-group">
+                                            <label>Cuántos días llega?</label>
+                                            <input class="form-control" name="cdias" type="number" value="{{ hogar.diasAgua }}" autocomplete="off" required min="1" max="7">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4" style="display:none;" id="oculto6">
+                                        <div class="form-group">
+                                            <label>Los días en que llega el agua, el suministro es continuo las 24 horas?</label>
+                                            <select class="form-control" name="hllega" id="hllega" required onchange="funcionx(this.value)">
+                                                <option value=""> -------------------------- </option>
+                                                <option value="True"{% if hogar.continuoAgua == True %}selected {% endif %}>Si</option>
+                                                <option value="False"{% if hogar.continuoAgua == False %}selected {% endif %}>No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5" style="display:none;" id="oculto7">
+                                        <div class="form-group">
+                                            <label>Cuántos horas llega? <br>&nbsp</label>
+                                            <input class="form-control" name="choras" type="number" value="{{ hogar.horasAgua }}" autocomplete="off" required min="1" max="24">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+    function funcion(valor){
+        if(valor == 'No tiene'){
+            document.formulario.ubica.required = false;
+            document.formulario.cinodoro.required = false;
+            document.formulario.usaInodoro.required = false;
+            document.getElementById('oculto1').style.display='none';
+            document.getElementById('oculto2').style.display='none';
+            document.getElementById('oculto3').style.display='none';
+            document.formulario.cinodoro.value = 0;
+        }
+        else{
+            document.formulario.ubica.required = true;
+            document.formulario.cinodoro.required = true;
+            document.formulario.usaInodoro.required = true;
+            document.getElementById('oculto1').style.display='block';
+            document.getElementById('oculto2').style.display='block';
+            document.getElementById('oculto3').style.display='block';
+            document.formulario.cinodoro.value = "";
+        }
+    }
+    </script>
+    <script type="text/javascript">
+    function funciona(valor){
+        if(valor == 'Acueducto'){
+            document.formulario.hllega.required = true;
+            document.formulario.dllega.required = true;
+            document.getElementById('oculto4').style.display='block';
+            document.getElementById('oculto6').style.display='block';
+            document.formulario.dllega.value = "";
+
+        }
+        else{
+
+            document.formulario.hllega.required = false;
+            document.formulario.dllega.required = false;
+            document.getElementById('oculto4').style.display='none';
+            document.getElementById('oculto6').style.display='none';
+            document.formulario.dllega.value = 0;
+        }
+    }
+    </script>
+    <script type="text/javascript">
+    function funcions(valor){
+        if(valor == 'False'){
+            document.formulario.cdias.required = true;
+            document.getElementById('oculto5').style.display='block';
+            document.formulario.cdias.value = "";
+        }
+        else{
+
+            document.formulario.cdias.required = false;
+            document.getElementById('oculto5').style.display='none';
+            document.formulario.cdias.value = 0;
+        }
+    }
+    </script>
+    <script type="text/javascript">
+    function funcionx(valor){
+        if(valor == 'False'){
+            document.formulario.choras.required = true;
+            document.getElementById('oculto7').style.display='block';
+            document.formulario.choras.value = "";
+        }
+        else{
+
+            document.formulario.choras.required = false;
+            document.getElementById('oculto7').style.display='none';
+            document.formulario.choras.value = 0;
+        }
+    }
+    </script>
+{% endblock %}

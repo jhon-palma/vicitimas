@@ -1,0 +1,44 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+    {% block header %}
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Sistema de información para la caracterización y gestión de la población víctima del conflicto armado</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><img class="img" src="{% static 'images/myAvatar.png' %}"/></li>
+                    <li><a href="#">Bienvenid@ Jhon Palma</a></li>
+                    <li><a href="#"><span class="fa fa-sign-out fa-lg top"></span> Salir</a></li>
+                </ul>
+            </div>
+        </nav>
+    {% endblock %}
+    <div class="container">
+        <div class="row mennu">
+
+            <div class="col-lg-3 msn">
+                <a href="{% url 'beneficiario:beneficiario_consulta' %}">
+                    <i class="fa fa-user-circle fa-15x " aria-hidden="true"><h2>Beneficiarios</h2></i>
+                </div>
+                </a>
+            <div class="col-lg-3 msn">
+                <a href="#">
+                    <i class="fa fa-university fa-15x text-center" aria-hidden="true"><h2>Dependencias</h2></i>
+                </a>
+            </div>
+            <div class="col-lg-3 msn">
+                <a href="#">
+                    <i class="fa fa-plus-circle fa-15x text-center" aria-hidden="true"><h2 class="text-center">Ayudas</h2></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <footer class="footer foo">
+        <div class="container">
+            <p class="text-muted">Software para la condonación Proyecto Talento Digital Ministerio de las TIC.</p>
+        </div>
+    </footer>
+{% endblock %}

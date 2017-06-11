@@ -1,0 +1,204 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% block title %}Datos de Residencia{% endblock %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-md-12">
+            <h1 class="page-header">Datos de Residencia</h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <form method="post" name="formulario">
+            {% csrf_token %}
+            <div class="tab-content">
+                <div class="tab-pane fade in active">
+                    <div class="col-md-12 form lab">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Departamento: </label>
+                                        <select class="form-control" id="departamento" name="departamento" required>
+                                            <option value=""> -------------- </option>
+                                            {% for departamento in departamentos %}
+                                            <option value="{{ departamento.id }}" {% if hogar.ciudadResidencia.departamento_id == departamento.id %} selected {% endif %}> {{ departamento.departamento }} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Ciudad: </label>
+                                        <select class="form-control" name="ciudad" id="ciudad" disabled="" required>
+                                            <option value=""> -------------- </option>
+                                            {% for ciudad in ciudades %}
+                                            <option value="{{ ciudad.id }}"{% if hogar.ciudadResidencia.id == ciudad.id %} selected {% endif %}> {{ ciudad.ciudad }} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="nivel">Zona: </label>
+                                        <select class="form-control" name="zonaPredio" required>
+                                            <option value=""> --- </option>
+                                            {% for zona in zonas %}
+                                            <option value="{{ zona.0 }}" {% if hogar.zonaPredio == zona.0 %} selected {% endif %}> {{ zona.1 }} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Dirección de residencia actual:</label>
+                                            <input class="form-control" name="direccion" placeholder="Dirección" value="{{ hogar.direccion }}" type="text" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Barrio:</label>
+                                            <input class="form-control" name="barrio" placeholder="Barrio" value="{{ hogar.barrio }}" type="text" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="nivel">Estrato: </label>
+                                            <select class="form-control" name="estratoPredio" required>
+                                                <option value=""> --- </option>
+                                                {% for x in estratos %}
+                                                <option value="{{ x.0 }}" {% if eben == x.0 %} selected {% endif %}> {{ x.0 }} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Tipo de Vivienda: </label>
+                                            <select class="form-control" name="tipoVivienda" required>
+                                                <option value=""> --- </option>
+                                                {% for vivienda in viviendas %}
+                                                <option value="{{ vivienda.id }}" {% if hogar.tipoVivienda.id == vivienda.id %} selected {% endif %}> {{ vivienda.tipoVivienda }} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label>Condición de ocupación de la vivienda</label>
+                                            <select class="form-control" name="ocupaVivienda" required>
+                                                <option value=""> -------------- </option>
+                                                {% for h in ocupaViviendas %}
+                                                <option value="{{ h.id }}" {% if hogar.ocupaVivienda.id == h.id %} selected {% endif %}> {{ h.ocupaVivienda }} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 sinpadding">
+                                        <label>Fecha desde que reside en el municipio</label>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <select name="diavive" id="dobdia" class="form-control" required></select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select name="mesvive" id="dobmes" class="form-control" required></select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select name="anovive" id="dobano" class="form-control" required></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn btn-success">Crear</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        $('#departamento').on('change',inicio);
+        function inicio() {
+            var id = $(this).val();
+            $.ajax({
+                data : {'id':id},
+                url: '{% url "beneficiario:ciudadesAjax" %}',
+                type: 'get',
+                success: function(data){
+                    var select = $('#ciudad').html("<option value=''>-- Seleccione una ciudad -- </option>");
+                    for (var i = 0; i < data.length ; i++){
+                        select.append('<option value="'
+                            + data[i].pk
+                            + '">'
+                            + data[i].fields.ciudad
+                            + '</option>' );
+                    }
+                }
+            })
+            $("#ciudad").removeAttr("disabled");
+        }
+    </script>
+    <script src="{% static 'js/dobPicker.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.dobPicker({
+                daySelector: '#dobdia', /*   */
+                monthSelector: '#dobmes', /*   */
+                yearSelector: '#dobano', /*   */
+                dayDefault: '{% if dianace %} {{ dianace }} {% else %} Día {% endif %}', /* Optional */
+                monthDefault: '{% if mesnace %} {{ mesnace }} {% else %} Mes {% endif %}', /* Optional */
+                yearDefault: '{% if anonace %} {{ anonace }} {% else %} Año {% endif %}', /* Optional */
+                minimumAge: 0, /* Optional */
+                maximumAge: 100 /* Optional */
+            });
+        });
+    </script>
+    <script>
+        function funcion(value)
+        {
+            if(value=="1" || value==true){
+                document.getElementById("departpa").disabled=false;
+                document.getElementById("inicior").disabled=false;
+            }
+            else{
+                document.getElementById("departpa").disabled=true;
+                document.getElementById("inicior").disabled=true;
+                document.getElementById("ciudpa").disabled=true;
+            }
+        }
+        window.onload = funcion;
+    </script>
+{% endblock %}

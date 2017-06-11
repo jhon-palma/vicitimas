@@ -1,0 +1,184 @@
+{% load staticfiles %}
+<h2 class="page-header">Detalle de Beneficiario</h2>
+<div class="row">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-gray">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-graduation-cap fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div>Datos de</div>
+                        <div class="title">Educación</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">Crear</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yll">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-wrench fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div>Información</div>
+                        <div class="title">Laboral</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">Crear</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        {% if msg %}
+<div class="alert alert-danger"> {{ msg }} </div>
+        {% endif %}
+        <!-- /.row -->
+<div class="col-md-12">
+    <h1 class="page-header">Creación de usuarios</h1>
+</div>
+<ul class="nav nav-tabs nav-justified cabeza">
+
+    <li><a href="#educacion" data-toggle="tab">Datos de educación</a></li>
+</ul>
+<form method="post">
+    {% csrf_token %}
+    <div class="tab-content">
+        <div class="tab-pane fade"id="educacion">
+            <div class="col-md-12 form lab">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label>Máximo nivel Educativo alcanzado</label>
+                                <select class="form-control" name="educacion"  >
+                                    <option value="0">----------------------</option>
+                                    {% for educa in educacion %}
+                                    <option value="{{ educa.id }}">{{ educa.nivel }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-7">
+                                <label>Institución educativa donde estudia actualmente</label>
+                                <select class="form-control" name="instituto"  >
+                                    <option value="0">----------------------</option>
+                                    {% for institucion in instituciones %}
+                                    <option value="{{ institucion.id }}">{{ institucion.institucion }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: right;">
+            <a href="#"><button class="btn btn-success" id="btnReview">Siguiente <i class="fa fa-arrow-right" aria-hidden="true"></i></button></a>
+            <button type="submit" class="btn btn-success">Crear</button>
+        </div>
+    </div>
+</form>
+</div>
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script>window.jQuery || document.write('<script src="{% static 'js/jquery.min.js' %}"><\/script>')</script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+    <script type="text/javascript">
+        $('#btnReview').click(function(){
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+    </script>
+    <script>
+        $('#depart').on('change',inicio);
+        function inicio() {
+            var id = $(this).val();
+            $.ajax({
+                data : {'id':id},
+                url: 'ciudadesAjax',
+                type: 'get',
+                success: function(data){
+                    var select = $('#ciud').html("<option value='0'>-- Seleccione una ciudad -- </option>");
+                    for (var i = 0; i < data.length ; i++){
+                        select.append('<option value="'
+                            + data[i].pk
+                            + '">'
+                            + data[i].fields.ciudad
+                            + '</option>' );
+                    }
+                }
+            })
+        }
+    </script>
+    <script>
+        $('#dep').on('change',inicio);
+        function inicio() {
+            var id = $(this).val();
+            $.ajax({
+                data : {'id':id},
+                url: 'ciudadesAjax',
+                type: 'get',
+                success: function(data){
+                    var select = $('#ciu').html("<option value='0'>-- Seleccione una ciudad -- </option>");
+                    for (var i = 0; i < data.length ; i++){
+                        select.append('<option value="'
+                            + data[i].pk
+                            + '">'
+                            + data[i].fields.ciudad
+                            + '</option>' );
+                    }
+                }
+            })
+        }
+    </script>
+    <script src="{% static 'js/dobPicker.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.dobPicker({
+                daySelector: '#dobday', /*   */
+                monthSelector: '#dobmonth', /*   */
+                yearSelector: '#dobyear', /*   */
+                dayDefault: 'Día', /* Optional */
+                monthDefault: 'Mes', /* Optional */
+                yearDefault: 'Año', /* Optional */
+                minimumAge: 0, /* Optional */
+                maximumAge: 100 /* Optional */
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.dobPicker({
+                daySelector: '#dobdia', /*   */
+                monthSelector: '#dobmes', /*   */
+                yearSelector: '#dobano', /*   */
+                dayDefault: 'Día', /* Optional */
+                monthDefault: 'Mes', /* Optional */
+                yearDefault: 'Año', /* Optional */
+                minimumAge: 0, /* Optional */
+                maximumAge: 100 /* Optional */
+            });
+        });
+    </script>
+</body>
+</html>

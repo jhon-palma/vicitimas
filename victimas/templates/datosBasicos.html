@@ -1,0 +1,224 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}Datos basicos{% endblock %}
+{% block content %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-md-12">
+            <h1 class="page-header">Datos básicos</h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <form method="post" name="formulario" id="formulario_basico">
+            {% csrf_token %}
+            <div class="tab-content">
+                <div class="tab-pane fade in active">
+                    <div class="col-md-12 form lab">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Extranjero</label>
+                                        <select class="form-control" onchange="extra(extranjero.value)" name="extranjero" id="extranjero" required>
+                                            <option value="">------</option>
+                                            <option value="False" {% if extranjero == False %} selected {% endif %}>No</option>
+                                            <option value="True" {% if extranjero == True %} selected {% endif %}>Si</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Tipo de documento</label>
+                                        <select class="form-control" name="tipod" id="tipod" required>
+                                            <option value=""> ------------ </option>
+                                            {% for tipo in tipoDocumento %}
+                                            <option value="{{ tipo.id }}" {% if tipod.id == tipo.id %} selected {% endif %}> {{ tipo.tipo }} </option>
+                                            {% endfor %} type="text/javascript"
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Número de documento:</label>
+                                        <input class="form-control" name="numeroDocumento" placeholder="Número de Documento" type="number" value="{{ numeroDocumento }}" autocomplete="off" id="numeroDocumento" onblur="existe(numeroDocumento.value)" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 sinpadding">
+                                    <div class="form-group">
+                                        <label>Fecha de nacimiento</label>
+                                        <!---<input class="form-control" type="text" name="fechaN" value="{{ datos.fechaN|date:"d/m/Y" }}" placeholder="DD/MM/AAAA">-->
+                                        <div class="row">
+                                            <div class="col-md-3 sinpadding">
+                                                <select name="dianace" id="dobday" class="form-control" required></select>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <select name="mesnace" id="dobmonth" class="form-control" required></select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <select name="anonace" id="dobyear" class="form-control" required></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="nome">Primer apellido:</label>
+                                        <input class="form-control pcapital" name="apellidoUno" id="apellidoUno" placeholder="Primer apellido" type="text" value="{{ apellidoUno }}" autocomplete="off" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="nome">Segundo apellido:</label>
+                                        <input class="form-control pcapital" name="apellidoDos" id="apellidoDos" placeholder="Segundo apellido" type="text" value="{{ apellidoDos }}" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="nome">Primer nombre:</label>
+                                        <input class="form-control pcapital" name="nombreUno" id="nombreUno" placeholder="Primer nombre" type="text" value="{{ nombreUno }}" autocomplete="off" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="nome">Segundo nombre:</label>
+                                        <input class="form-control pcapital" name="nombreDos" id="nombreDos" placeholder="Segundo nombre" type="text" value="{{ nombreDos }}" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Jefe de hogar</label>
+                                        <select class="form-control" name="jefe" id="jefe" onchange="funcion(this.value)" required>
+                                            <option value="">------</option>
+                                            <option value="False" {% if jefe == False %} selected {% endif %}>No</option>
+                                            <option value="True" {% if jefe == True %} selected {% endif %}>Si</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Parentesco con el Jefe de hogar</label>
+                                        <select class="form-control" name="parentesco" id="parentesco">
+                                            <option value=""> ----------------- </option>
+                                            {% for tipo in relationship %}
+                                            <option value="{{ tipo.id }}" {% if parentesco.id == tipo.id %} selected {% endif %}> {{ tipo.parentesco }} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Documento Cabeza Hogar:</label>
+                                        <input class="form-control" name="docCabeza" id="docCabeza" value="{{ docCabeza }}" placeholder="Número de Documento Cabeza" type="number" onblur="existed(docCabeza.value)">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Código Unidad de víctimas:</label>
+                                        <input class="form-control" name="numeroRegistro" id="numeroRegistro" placeholder="Número de registro" type="text" value="{{ codigoUV }}" autocomplete="off" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="email">Email:</label>
+                                        <input class="form-control" name="email" id="email" placeholder="Email" type="email" value="{{ email }}" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Teléfono:</label>
+                                    <input class="form-control" name="telefono" id="telefono" placeholder="Teléfono" type="tel" value="{{ telefono }}" autocomplete="off">
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Celular:</label>
+                                    <input class="form-control" name="celular" id="celular" placeholder="Celular" type="tel" value="{{ celular }}" autocomplete="off">
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Estado civil:</label>
+                                    <select class="form-control" name="estado" id="estado" required>
+                                        <option value=""> -------------- </option>
+                                        {% for estado in estadoc %}
+                                        <option value="{{ estado.id }}" {% if estadoCivil.id == estado.id %} selected {% endif %}> {{ estado.estadoCivil }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Trabaja al interior de este hogar como servicio domestico o cuidandero</label>
+                                    <select class="form-control" name="tservicio" id="tservicio" required>
+                                        <option value="">------</option>
+                                        <option value="False" {% if tservicio == False %} selected {% endif %}>No</option>
+                                        <option value="True" {% if tservicio == True %} selected {% endif %}>Si</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Paga a otro miembro del hogar arriendo y alimentación</label>
+                                    <select class="form-control" name="pago" id="pago" required>
+                                        <option value="">------</option>
+                                        <option value="False" {% if pago == False %} selected {% endif %}>No</option>
+                                        <option value="True" {% if pago == True %} selected {% endif %}>Si</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn btn-success">Crear</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/datosbasicos.js' %}"></script>
+    <script src="{% static 'js/dobPicker.js' %}"></script>
+    <script src="{% static 'js/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $.dobPicker({
+                daySelector: '#dobday', /*   */
+                monthSelector: '#dobmonth', /*   */
+                yearSelector: '#dobyear', /*   */
+                dayDefault: '{% if dianace %} {{ dianace }} {% else %} Día {% endif %}', /* Optional */
+                monthDefault: '{% if mesnace %} {{ mesnace }} {% else %} Mes {% endif %}', /* Optional */
+                yearDefault: '{% if anonace %} {{ anonace }} {% else %} Año {% endif %}', /* Optional */
+                minimumAge: 0, /* Optional */
+                maximumAge: 100 /* Optional */
+            });
+        });
+    </script>
+{% endblock %}
