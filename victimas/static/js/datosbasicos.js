@@ -15,8 +15,6 @@ function extra(extranjero)
 function existe(numeroDocumento)
 {
     var doc = numeroDocumento;
-
-    console.log(doc);
     $.ajax({
         data : {'doc':doc},
         url: '/beneficiario/beneficiarioAjax',
@@ -31,7 +29,7 @@ function existe(numeroDocumento)
                     confirmButtonText: "Entendido",
 
                 });
-                document.formulario.numeroDocumento.focus();
+
             }
             else
             {
@@ -44,8 +42,6 @@ function existe(numeroDocumento)
 function existed(docCabeza)
 {
     var doc = docCabeza;
-
-    console.log(doc);
     $.ajax({
         data : {'doc':doc},
         url: '/beneficiario/beneficiarioAjax',
@@ -64,7 +60,6 @@ function existed(docCabeza)
                     type: "error",
                     confirmButtonText: "Entendido",
                 });
-                document.formulario.docCabeza.focus();
             }
         }
     });

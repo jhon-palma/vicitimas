@@ -29,24 +29,11 @@ def datosBasicos(request):
             beneficiario.apellidoDos = request.POST['apellidoDos']
             beneficiario.nombreUno = request.POST['nombreUno']
             beneficiario.nombreDos = request.POST['nombreDos']
-            if request.POST['jefe'] == 'True':
-                beneficiario.parentesco = Parentesco.objects.get(pk = '1')
-                beneficiario.cabeza = True
-                beneficiario.documentoCabeza = request.POST['numeroDocumento']
-
-            if request.POST['jefe'] == 'False':
-                head = Beneficiario.objects.filter( documentoCabeza  = request.POST['docCabeza'] )
-                beneficiario.cabeza = False
-                if head:
-                    beneficiario.parentesco = Parentesco.objects.get(pk = request.POST['parentesco'])
-                    beneficiario.documentoCabeza = request.POST['docCabeza']
-                else:
-                    messages.warning(request, 'Cabeza de hogar no Existe')
-                    return HttpResponseRedirect('/beneficiario/datosBasicos',informacion)
+            beneficiario.parentesco = Parentesco.objects.get(pk = request.POST['parentesco'])
+            beneficiario.cabeza = request.POST['jefe']
+            beneficiario.documentoCabeza = request.POST['docCabeza']
             beneficiario.codigoUV = request.POST['numeroRegistro']
-
             beneficiario.extranjero = request.POST['extranjero']
-
             beneficiario.tipoDocumento = TipoDocumento.objects.get(pk = request.POST['tipod'])
             beneficiario.numeroDocumento = request.POST['numeroDocumento']
             ano = request.POST['anonace']
@@ -57,14 +44,6 @@ def datosBasicos(request):
             beneficiario.telefonoFijo = request.POST['telefono']
             beneficiario.telefonoCelular = request.POST['celular']
             beneficiario.estadoCivil = EstadoCivil.objects.get(pk = request.POST['estado'])
-            if request.POST["pago"] == '1':
-                beneficiario.pagaOtro = True
-            else:
-                beneficiario.pagaOtro = False
-            if request.POST["tservicio"] == '1':
-                beneficiario.tservicio = True
-            else:
-                beneficiario.tservicio = False
             beneficiario.save()
             if request.POST['jefe'] == 'True':
                 hogar = Hogar()
@@ -135,8 +114,6 @@ def datosBasicosEditar(request, id_ben):
             beneficiario.telefonoFijo = request.POST['telefono']
             beneficiario.telefonoCelular = request.POST['celular']
             beneficiario.estadoCivil = EstadoCivil.objects.get(pk = request.POST['estado'])
-            beneficiario.pagaOtro = request.POST["pago"]
-            beneficiario.tservicio = request.POST["tservicio"]
             beneficiario.save()
             messages.success(request, validator.getMessage())
             return HttpResponseRedirect('/beneficiario/beneficiario_consulta')
