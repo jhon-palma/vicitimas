@@ -34,6 +34,7 @@
                 {% endif %}
             {% endfor %}
         </div>
+
         <form method="post" name="formulario" id="formulario_basico">
             {% csrf_token %}
             <div class="tab-content">
@@ -41,9 +42,14 @@
                     <div class="col-md-12 form lab">
                         <div class="col-md-12">
                             <div class="row">
+                                <div class="form-group">
+                                    <label>Los campos marcados con * son obligatorios</label>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label>Extranjero</label>
+                                        <label>Extranjero *</label>
                                         <select class="form-control" onchange="extra(extranjero.value)" name="extranjero" id="extranjero" required>
                                             <option value="">------</option>
                                             <option value="False" {% if extranjero == False %} selected {% endif %}>No</option>
@@ -53,7 +59,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Tipo de documento</label>
+                                        <label>Tipo de documento *</label>
                                         <select class="form-control" name="tipod" id="tipod" required>
                                             <option value=""> ------------ </option>
                                             {% for tipo in tipoDocumento %}
@@ -64,13 +70,13 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Número de documento:</label>
+                                        <label>Número de documento *</label>
                                         <input class="form-control" name="numeroDocumento" placeholder="Número de Documento" type="number" value="{{ numeroDocumento }}" autocomplete="off" id="numeroDocumento" onblur="existe(numeroDocumento.value)" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4 sinpadding">
                                     <div class="form-group">
-                                        <label>Fecha de nacimiento</label>
+                                        <label>Fecha de nacimiento *</label>
                                         <!---<input class="form-control" type="text" name="fechaN" value="{{ datos.fechaN|date:"d/m/Y" }}" placeholder="DD/MM/AAAA">-->
                                         <div class="row">
                                             <div class="col-md-3 sinpadding">
@@ -89,13 +95,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="nome">Primer apellido:</label>
+                                        <label for="nome">Primer apellido *</label>
                                         <input class="form-control pcapital" name="apellidoUno" id="apellidoUno" placeholder="Primer apellido" type="text" value="{{ apellidoUno }}" autocomplete="off" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="nome">Segundo apellido:</label>
+                                        <label for="nome">Segundo apellido </label>
                                         <input class="form-control pcapital" name="apellidoDos" id="apellidoDos" placeholder="Segundo apellido" type="text" value="{{ apellidoDos }}" autocomplete="off">
                                     </div>
                                 </div>
@@ -103,13 +109,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="nome">Primer nombre:</label>
+                                        <label for="nome">Primer nombre *</label>
                                         <input class="form-control pcapital" name="nombreUno" id="nombreUno" placeholder="Primer nombre" type="text" value="{{ nombreUno }}" autocomplete="off" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="nome">Segundo nombre:</label>
+                                        <label for="nome">Segundo nombre </label>
                                         <input class="form-control pcapital" name="nombreDos" id="nombreDos" placeholder="Segundo nombre" type="text" value="{{ nombreDos }}" autocomplete="off">
                                     </div>
                                 </div>
@@ -117,7 +123,7 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label>Jefe de hogar</label>
+                                        <label>Jefe de hogar *</label>
                                         <select class="form-control" name="jefe" id="jefe" onchange="funcion(this.value)" required>
                                             <option value="">------</option>
                                             <option value="False" {% if jefe == False %} selected {% endif %}>No</option>
@@ -144,7 +150,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Código Unidad de víctimas:</label>
+                                        <label>Código Unidad de víctimas *</label>
                                         <input class="form-control" name="numeroRegistro" id="numeroRegistro" placeholder="Número de registro" type="text" value="{{ codigoUV }}" autocomplete="off" required>
                                     </div>
                                 </div>
@@ -165,7 +171,7 @@
                                     <input class="form-control" name="celular" id="celular" placeholder="Celular" type="tel" value="{{ celular }}" autocomplete="off">
                                 </div>
                                 <div class="col-md-4">
-                                    <label>Estado civil:</label>
+                                    <label>Estado civil *</label>
                                     <select class="form-control" name="estado" id="estado" required>
                                         <option value=""> -------------- </option>
                                         {% for estado in estadoc %}

@@ -15,6 +15,7 @@ function extra(extranjero)
 function existe(numeroDocumento)
 {
     var doc = numeroDocumento;
+
     $.ajax({
         data : {'doc':doc},
         url: '/beneficiario/beneficiarioAjax',
@@ -29,7 +30,7 @@ function existe(numeroDocumento)
                     confirmButtonText: "Entendido",
 
                 });
-
+                document.formulario.numeroDocumento.focus();
             }
             else
             {
@@ -42,6 +43,7 @@ function existe(numeroDocumento)
 function existed(docCabeza)
 {
     var doc = docCabeza;
+
     $.ajax({
         data : {'doc':doc},
         url: '/beneficiario/beneficiarioAjax',
@@ -50,7 +52,6 @@ function existed(docCabeza)
             if(data['valido'] )
             {
                 return false;
-
             }
             else
             {
@@ -68,15 +69,13 @@ function existed(docCabeza)
 function funcion(valor){
     if(valor == 'False' ){
         document.formulario.parentesco.disabled = false;
-        document.formulario.docCabeza.disabled = false;
         document.formulario.parentesco.required = true;
+        document.formulario.parentesco.selectedIndex = null;
         document.formulario.docCabeza.required = true;
     }
     else{
-        document.formulario.parentesco.disabled = true;
-        document.formulario.docCabeza.disabled = true;
-        document.formulario.parentesco.options[1].disabled = true;
-        document.formulario.parentesco.selectedIndex = null;
-        document.formulario.docCabeza.value = "";
+        var ndoc = document.formulario.numeroDocumento.value;
+        document.formulario.parentesco.options[1].selected = true;
+        document.formulario.docCabeza.value = ndoc;
     }
 }

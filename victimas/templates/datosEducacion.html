@@ -99,26 +99,6 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3" style="display: none;" id="ocultok">
-                                    <div class="form-group">
-                                        <label>¿Ha recibido kit escolar?: </label>
-                                        <select class="form-control" name="kit" id="kit">
-                                            <option value="True" {% if ben.kitEscolar == True %} selected {% endif %}>Si</option>
-                                            <option value="False" {% if ben.kitEscolar == False %} selected {% endif %}>No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3" style="display: none;" id="ocultou">
-                                    <div class="form-group">
-                                        <label>¿Ha recibido uniforme?: </label>
-                                        <select class="form-control" name="uniforme" id="uniforme">
-                                            <option value="True" {% if ben.uniforme == True %} selected {% endif %}>Si</option>
-                                            <option value="False" {% if ben.uniforme == False %} selected {% endif %}>No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <label>¿Tiene estudios o cursos complementarios?: </label>
@@ -210,14 +190,10 @@
         {
             if (document.formulario.estudia.options[1].selected == true ){
                 $("#oculto").removeAttr("style");
-                $("#ocultok").removeAttr("style");
-                $("#ocultou").removeAttr("style");
                 document.formulario.instituto.value = "";
                 document.formulario.instituto.required = true;
             }else {
                 $("#oculto").css("display",'none');
-                $("#ocultok").css("display",'none');
-                $("#ocultou").css("display",'none');
                 document.formulario.instituto.value = "0";
                 document.formulario.instituto.required = false;
             }
@@ -258,7 +234,7 @@
                 url: '{% url "beneficiario:educativa_nueva" %}',
                 type: 'get',
             });
-            
+
         }
     </script>
 {% endblock %}

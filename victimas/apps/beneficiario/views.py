@@ -11,7 +11,6 @@ from django.template.loader import render_to_string
 import json
 import weasyprint
 
-
 def index(request):
     return render(request,'index.html')
 
@@ -53,7 +52,6 @@ def datosBasicos(request):
             ben = Beneficiario.objects.get(id=beneficiario.id)
             messages.success(request, validator.getMessage())
             return HttpResponseRedirect('/beneficiario/documentos/%s' % ben.id)
-            #return HttpResponseRedirect('/beneficiario/datosCaracterizacion/%s' % ben.id, informacion )
         messages.warning(request, validator.getMessage())
         return HttpResponseRedirect('/beneficiario/datosBasicos',informacion)
     return render(request,'datosBasicos.html', informacion)
@@ -82,26 +80,9 @@ def datosBasicosEditar(request, id_ben):
             beneficiario.apellidoDos = request.POST['apellidoDos']
             beneficiario.nombreUno = request.POST['nombreUno']
             beneficiario.nombreDos = request.POST['nombreDos']
-            if request.POST['jefe'] == 'True':
-                beneficiario.parentesco = Parentesco.objects.get(pk = '1')
-                beneficiario.cabeza = True
-                beneficiario.documentoCabeza = request.POST['numeroDocumento']
-            if request.POST['jefe'] == 'False':
-                if not 'docCabeza' in request.POST:
-                    head = beneficiario.documentoCabeza
-                else:
-                    head = Beneficiario.objects.filter( documentoCabeza  = request.POST['docCabeza'] )
-                    beneficiario.cabeza = False
-                if head:
-                    if not 'parentesco' in request.POST:
-                        beneficiario.parentesco = beneficiario.parentesco
-                        beneficiario.documentoCabeza = beneficiario.documentoCabeza
-                    else:
-                        beneficiario.parentesco = Parentesco.objects.get(pk = request.POST['parentesco'])
-                        beneficiario.documentoCabeza = request.POST['docCabeza']
-                else:
-                    messages.warning(request, 'Cabeza de hogar no Existe')
-                    return HttpResponseRedirect('/beneficiario/datosBasicos',informacion)
+            beneficiario.parentesco = Parentesco.objects.get(pk = request.POST['parentesco'])
+            beneficiario.cabeza = request.POST['jefe']
+            beneficiario.documentoCabeza = request.POST['docCabeza']
             beneficiario.codigoUV = request.POST['numeroRegistro']
             beneficiario.extranjero = request.POST['extranjero']
             beneficiario.tipoDocumento = TipoDocumento.objects.get(pk = request.POST['tipod'])
@@ -123,11 +104,11 @@ def datosBasicosEditar(request, id_ben):
 
 def documentos(request, id_ben):
     beneficiario = Beneficiario.objects.get(id = id_ben)
-    hogar = Hogar.objects.get(codigo = beneficiario.documentoCabeza)
     if request.method == 'POST':
         beneficiario.archivo = request.FILES['img1']
         beneficiario.archivo.name = str(beneficiario.numeroDocumento) + '.pdf'
         if beneficiario.cabeza == 'True':
+            hogar = Hogar.objects.get(codigo = beneficiario.documentoCabeza)
             hogar.recibo = request.FILES['img3']
             hogar.recibo.name = "rp" + str(hogar.codigo) + '.pdf'
             hogar.certificado = request.FILES['img2']
@@ -316,19 +297,10 @@ def datosEducacion(request, id_ben):
                 beneficiario.institucionEducativa = InstitucionEducativa.objects.get(pk = request.POST['instituto'])
             beneficiario.ultimoAno = request.POST['ultimo']
             beneficiario.nivelEducativo = NivelEducativo.objects.get(pk = request.POST['educacion'])
-            if 'kit' in request.POST:
-                beneficiario.kitEscolar = request.POST['kit']
-            else:
-                beneficiario.kitEscolar = None
-            if 'uniforme' in request.POST:
-                beneficiario.uniforme = request.POST['uniforme']
-            else:
-                beneficiario.uniforme = None
             beneficiario.otrosEstudios = request.POST['adicional']
             cadena = ''
             lista = request.POST.getlist('otro[]')
             for x in lista:
-                print(x)
                 cadena = cadena+x+','
             beneficiario.otrosEstudiosD = cadena
             beneficiario.save()
@@ -355,13 +327,10 @@ def datosEducacionEditar(request, id_ben):
                 beneficiario.institucionEducativa = InstitucionEducativa.objects.get(pk = request.POST['instituto'])
             beneficiario.ultimoAno = request.POST['ultimo']
             beneficiario.nivelEducativo = NivelEducativo.objects.get(pk = request.POST['educacion'])
-            beneficiario.kitEscolar = request.POST['kit']
-            beneficiario.uniforme = request.POST['uniforme']
             beneficiario.otrosEstudios = request.POST['adicional']
             cadena = ''
             lista = request.POST.getlist('otro[]')
             for x in lista:
-                print(x)
                 cadena = cadena+x+','
             beneficiario.otrosEstudiosD = cadena
             beneficiario.save()
@@ -450,8 +419,8 @@ def datosResidencia(request, id_ben):
             dia = request.POST['diavive']
             hogar.fechaResidencia = ano+'-'+mes+'-'+dia
             hogar.save()
-            messages.success(request,'Datos modificados correctamente')
-            return HttpResponseRedirect('/beneficiario/datosResidenciaMaterial/%s' % beneficiario.id )
+            messages.success(request,'Datos Agregados correctamente')
+            return HttpResponseRedirect('/beneficiario/beneficiario_consulta')
         messages.warning(request,validator.getMessage())
         return redirect('/beneficiario/datosResidencia/%s' % beneficiario.id )
     return render(request, 'datosResidencia.html', datos)
