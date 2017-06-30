@@ -1,6 +1,6 @@
 {% extends 'template.html'%}
 {% load staticfiles %}
-{% block title %}Grupo Familiar{% endblock %}
+{% block title %}Genera Carnet{% endblock %}
 {% block content %}
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     {% for message in messages %}
@@ -31,7 +31,7 @@
         <div class="alert alert-danger"> {{ msg }} </div>
     {% endif %}
     {% if beneficiarios %}
-        <h1>Grupo familiar <a href="{% url 'beneficiario:imprimirCarnet'%}?grupo={{ beneficiarios.first.documentoCabeza}}"><i class="fa fa-print" aria-hidden="true"></i></a></h1>
+        <h1>Grupo familiar <a href="{% url 'beneficiario:imprimirCarnet'%}?grupo={{ beneficiarios.first.documentoCabeza}}" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a></h1>
         <table class="table table-bordered alt">
             <thead>
                 <tr>
@@ -53,7 +53,7 @@
                     <td>{{ carnet.codigo }}</td>
                     <td>{{ carnet.fechaExpide }}</td>
                     <td>{{ carnet.fechaVence }}</td>
-                    <td><a href="{% url 'beneficiario:imprimirCarnet'%}?beneficiario={{ carnet.beneficiario.numeroDocumento}}"><i class="fa fa-print" aria-hidden="true"></i></a></td>
+                    <td><a href="{% url 'beneficiario:imprimirCarnet'%}?beneficiario={{ carnet.beneficiario.numeroDocumento}}" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a></td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -1,0 +1,125 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}Informe Carnetización{% endblock %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        {% block mesages %}{% endblock %}
+        <div class="col-md-12">
+            <h1 class="page-header"><i class="fa fa-id-card-o" aria-hidden="true"></i> Informe de carnetización</h1>
+        </div>
+        <form method="post" name="formulario" id="formulario_basico">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Fecha inicial</label>
+                        <div class="row">
+                            <input class="form-control" type="date" id="fechaInicial" name="fechaInicial" required onchange="funcionx()"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Fecha final</label>
+                        <div class="row">
+                            <input class="form-control" type="date" id="fechaFinal" name="fechaFinal" required disabled="True" onchange="funciony()"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success" id="boton" disabled>Generar</button>
+            </div>
+        </form>
+        {% if beneficiarios %}
+            <h4>Carnets expedidos entre {{ fi }} y {{ ff }} <a href="{% url 'informes:infoSisbenPdf'%}?fi={{ dan }}&ff={{ dfn }}" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></h4>
+            <table class="table table-bordered alt">
+                <thead>
+                    <tr>
+                        <th class="active col-sm-1">Documento</td>
+                        <th class="active col-sm-2">Nombres y apellidos </td>
+                        <th class="active col-sm-1">Fecha Expedición </td>
+                        <th class="active col-sm-1">Fecha Vencimiento </td>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% for carnet in beneficiarios %}
+                    <tr>
+                        <td>{{ carnet.beneficiario.numeroDocumento }}</td>
+                        <td>{{ carnet.beneficiario.nombreUno|capfirst }} {{ carnet.beneficiario.nombreDos|capfirst }} {{ carnet.beneficiario.apellidoUno|capfirst }} {{ carnet.beneficiario.apellidoDos|capfirst }}</td>
+                        <td>{{ carnet.fechaExpide }}</td>
+                        <td>{{ carnet.fechaVence }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="4">
+                            Total carnets expedidos: <strong> {{ tl }} </strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                    {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-warning">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'js/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        function funcionx(){
+            var fi = document.getElementById("fechaInicial").value;
+            if(fi != '' ){
+                document.getElementById("fechaFinal").disabled = false;
+            }
+    }
+    </script>
+    <script type="text/javascript">
+    function funciony(){
+        var fi = document.getElementById("fechaInicial").value;
+        var ff = document.getElementById("fechaFinal").value;
+        if(fi>ff){
+            console.log(fi);
+            document.getElementById("boton").disabled= true;
+            swal({
+                title: "Error!",
+                text: "La fecha inicial es mayor que la fecha final!",
+                type: "error",
+                confirmButtonText: "Entendido",
+            });
+        }
+        else{
+            document.getElementById("boton").disabled= false;
+        }
+    }
+
+    </script>
+{% endblock %}

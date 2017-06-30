@@ -1,7 +1,47 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib import messages
 from apps.beneficiario.models import *
 from openpyxl import Workbook
+from django.utils.dateparse import parse_date
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from django.core.files.storage import FileSystemStorage
+def informes(request):
+    return render(request,'informes.html')
+
+def infoSisben(request):
+    if request.method == 'POST':
+        fi = request.POST['fechaInicial']
+        ff = request.POST['fechaFinal']
+        beneficiarios = Carnet.objects.filter(fechaExpide__range=[fi,ff])
+        if beneficiarios:
+            fin = parse_date(fi)
+            ffn = parse_date(ff)
+            tl = beneficiarios.count
+            return render(request,'infoSisben.html',{ 'beneficiarios':beneficiarios,'fi':fin,'ff':ffn,'tl':tl, 'dan':fi, 'dfn':ff })
+        else:
+            messages.error(request,'No se encontraron registros')
+            return redirect('/informes/infoSisben')
+    return render(request,'infoSisben.html')
+
+def infoSisbenPdf(request):
+    fi = request.GET['fi']
+    ff = request.GET['ff']
+
+    beneficiarios = Carnet.objects.filter(fechaExpide__range=[fi,ff])
+    fin = parse_date(fi)
+    ffn = parse_date(ff)
+    tl = beneficiarios.count
+    html_string = render_to_string('infoSisbenPdf.html',{'beneficiarios':beneficiarios,'fi':fin,'ff':ffn,'tl':tl })
+    html = HTML(string=html_string)
+    html.write_pdf(target='/tmp/infoSisben.pdf')
+
+    fs = FileSystemStorage('/tmp')
+    with fs.open('infoSisben.pdf') as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'filename="infoSisben.pdf"'.format("order.id")
+        return response
 
 def informeVca(request):
     beneficiarios = Beneficiario.objects.all()

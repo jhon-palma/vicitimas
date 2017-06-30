@@ -1,0 +1,45 @@
+{% extends 'template.html'%}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}Informes{% endblock %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        {% block mesages %}{% endblock %}
+        <div class="col-md-12">
+            <h1 class="page-header"><i class="fa fa-bar-chart"></i>Informes</h1>
+        </div>
+        <div  class="col-md-12">
+            {% for message in messages %}
+                {% if 'success' in message.tags %}
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }}
+                    </div>
+                    {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'error' in message.tags %}
+                    <div class="alert alert-error">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        <strong>Error!</strong>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for message in messages %}
+                {% if 'warning' in message.tags %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                        {{ message }} <a href="{% url 'beneficiario:datosBasicos' %}">Desea Registrarlo?</a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="col-lg-4">
+            <h3><a href="/informes/informeVca"><i class="fa fa-th" aria-hidden="true"></i> Informe VCA</a></h3>
+            <h3><a href="/informes/infoSisben"><i class="fa fa-id-card-o" aria-hidden="true"></i> Informe carnetización</a></h3>
+
+       </div>
+    </div>
+{% endblock %}

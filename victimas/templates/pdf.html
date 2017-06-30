@@ -63,7 +63,7 @@
         {% for usr in beneficiarios %}
         <table style="width:100%">
             <tr>
-                <td class="logo" ><img src="{% static 'images/logoSisben.png' %}"/></td>
+                <td class="logo" ><img src="https://www.sisben.gov.co/estilos/imgLayout/logowebantiguo2-01.png"/></td>
                 <td class="titulo1" colspan="3" >Sistema de Identificación y Clasificación de Potenciales Beneficiarios para <br>Programas Sociales</td>
                 <td class="titulo2" colspan="4" style="border-left:1px solid #000000";>Este carnet es intransferible. Si es usado por otra persona, sera confiscado. En caso de perdida favor avisar a la administracion Municipal</td>
             </tr>
@@ -102,6 +102,51 @@
             </tr>
         </table>
         {% endfor%}
+        {% endif %}
+
+        {% if bnk %}
+
+        <table style="width:100%">
+            <tr>
+                <td class="logo" ><img src="https://www.sisben.gov.co/estilos/imgLayout/logowebantiguo2-01.png"/></td>
+                <td class="titulo1" colspan="3" >Sistema de Identificación y Clasificación de Potenciales Beneficiarios para <br>Programas Sociales</td>
+                <td class="titulo2" colspan="4" style="border-left:1px solid #000000";>Este carnet es intransferible. Si es usado por otra persona, sera confiscado. En caso de perdida favor avisar a la administracion Municipal</td>
+            </tr>
+            <tr>
+                <td class="subtitulo" colspan="4"> GIRARDOT - CUNDINAMARCA </td>
+                <td class="detalles" colspan="2" style="border-left:1px solid #000000";>Fecha de Expedición</td>
+                <td class="detalles" colspan="2">Fecha de Vencimiento</td>
+            </tr>
+            <tr>
+                <td class="detalle" colspan="2">Carnet No.:</td>
+                <td class="detalle" colspan="2">{{ bnk.codigo }}</td>
+                <td class="detallet" colspan="2" style="border-left:1px solid #000000";>{{ bnk.fechaExpide|date:"d/m/Y" }}</td>
+                <td class="detallet" colspan="2">{{ bnk.fechaVence|date:"d/m/Y" }}</td>
+            </tr>
+            <tr>
+                <td class="detalle" colspan="2">Fecha de nacimiento:</td>
+                <td class="detalle" colspan="2"> {{ bnk.beneficiario.fechaNacimiento|date:"d/m/Y" }} </td>
+                <td style="border-left:1px solid #000000";></td>
+            </tr>
+            <tr>
+                <td class="detalle" colspan="2">Doc. de Identidad:</td>
+                <td class="detalle" colspan="2"> {{ bnk.beneficiario.tipoDocumento.codigo }} N° {{ bnk.beneficiario.numeroDocumento}}</td>
+                <td style="border-left:1px solid #000000";></td>
+            </tr>
+            <tr>
+                <td class="detalle">Nombre:</td>
+                <td class="detalle" colspan="3" style="text-transform: uppercase;" > {{ bnk.beneficiario.apellidoUno }} {{ bnk.beneficiario.apellidoDos }} {{ bnk.beneficiario.nombreUno }} {{ bnk.beneficiario.nombreDos }}</td>
+                <td class="detalles"colspan="4" style="border-left:1px solid #000000";>Firma Autorizada</td>
+
+            </tr>
+            <tr>
+                <td class="detalle" colspan="2">Programa:</td>
+                <td class="detalle" colspan="2"> PVCA</td>
+                <td class="firma"colspan="4" style="border-left:1px solid #000000";>DIEGO FERNANDO NUÑEZ B.</td>
+                <td class="firma"colspan="4" style="border-left:1px solid #000000";>DIRECTOR DEL SISBEN</td>
+            </tr>
+        </table>
+
         {% endif %}
     </body>
 </html>

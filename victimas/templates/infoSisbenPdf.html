@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>Carnet</title>
+        <style>
+        @page{
+            size: 27.9cm 21.6cm;
+            margin: 18px 30px;
+
+        }
+        .alt {
+            margin-top: 10px;
+        }
+        .table-bordered {
+            border: 1px solid #dddddd;
+        }
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        body {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 14px;
+            line-height: 1.42857143;
+        }
+        thead {
+            display: table-header-group;
+            vertical-align: middle;
+            border-color: inherit;
+        }
+        .table>thead>tr>th.active {
+            background-color: #f5f5f5;
+        }
+        .table-bordered>thead>tr>th {
+            border-bottom-width: 2px;
+            border: 1px solid #dddddd;
+        }
+        .table>thead>tr>th {
+            padding: 8px;
+            line-height: 1.42857143;
+        }
+        .table-bordered>tbody>tr>td{
+            border: 1px solid #dddddd;
+        }
+        .logo{
+            width: inherit;
+            height: auto;
+        }
+        .titulo1{
+            text-align: center;
+            vertical-align: text-top;
+            font: small-caps 100% serif;
+        }
+        .titulo2{
+            font-size: 16px;
+            text-align: center;
+        }
+        .subtitulo{
+            text-align: center;
+            font-weight: 700;
+        }
+        .detalle{
+            font-size: 15px;
+        }
+        .detalles{
+            font-size: 15px;
+            text-align: center;
+        }
+        .detallet{
+            font-size: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .firma{
+            font-size: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-style: italic;
+        }
+        </style>
+    </head>
+    <body>
+        <img src="https://www.sisben.gov.co/estilos/imgLayout/logowebantiguo2-01.png"/>
+        {% if beneficiarios %}
+            <h4>Carnets expedidos entre {{ fi }} y {{ ff }} </h4>
+            <table class="table table-bordered alt">
+                <thead>
+                    <tr>
+                        <th class="active col-sm-1">Documento</td>
+                        <th class="active col-sm-2">Nombres y apellidos </td>
+                        <th class="active col-sm-1">Fecha Expedición </td>
+                        <th class="active col-sm-1">Fecha Vencimiento </td>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% for carnet in beneficiarios %}
+                    <tr>
+                        <td>{{ carnet.beneficiario.numeroDocumento }}</td>
+                        <td>{{ carnet.beneficiario.nombreUno|capfirst }} {{ carnet.beneficiario.nombreDos|capfirst }} {{ carnet.beneficiario.apellidoUno|capfirst }} {{ carnet.beneficiario.apellidoDos|capfirst }}</td>
+                        <td>{{ carnet.fechaExpide }}</td>
+                        <td>{{ carnet.fechaVence }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="4">
+                            Total carnets expedidos: <strong> {{ tl }} </strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+    </body>
+</html>

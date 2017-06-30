@@ -1,72 +1,70 @@
 {% extends 'template.html'%}
 {% load staticfiles %}
-{% block title %}Grupo Familiar{% endblock %}
+{% block title %}Activar Carnet{% endblock %}
 {% block content %}
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
         <h1>Grupo familiar Activar carnet </h1>
-        <table class="table table-bordered alt">
-            <thead>
-                <tr>
-                    <th class="active col-sm-1">Documento</td>
-                    <th class="active col-sm-2">Nombres y apellidos </td>
-                    <th class="active col-sm-2">Parentesco </td>
-                    <th class="active col-sm-2">Fecha Expedición </td>
-                    <th class="active col-sm-2">Fecha Vencimiento </td>
-                </tr>
-            </thead>
-            <tbody>
-                <form method="post" name="formulario" id="formulario_basico">
-                    {% csrf_token %}
-                    <div class="col-md-4 sinpadding">
-                        <div class="form-group">
-                            <label>Fecha de expedición</label>
-                            <!---<input class="form-control" type="text" name="fechaN" value="{{ datos.fechaN|date:"d/m/Y" }}" placeholder="DD/MM/AAAA">-->
-                            <div class="row">
-                                <div class="col-md-3 sinpadding">
-                                    <select name="diaexp" id="dobday" class="form-control" required></select>
-                                </div>
-                                <div class="col-md-5">
-                                    <select name="mesexp" id="dobmonth" class="form-control" required></select>
-                                </div>
-                                <div class="col-md-3">
-                                    <select name="anoexp" id="dobyear" class="form-control" required onchange="funcionx()"></select>
-                                </div>
-                            </div>
+        <form method="post" name="formulario" id="formulario_basico">
+            {% csrf_token %}
+            <div class="col-md-4 sinpadding">
+                <div class="form-group">
+                    <label>Fecha de expedición</label>
+                    <!---<input class="form-control" type="text" name="fechaN" value="{{ datos.fechaN|date:"d/m/Y" }}" placeholder="DD/MM/AAAA">-->
+                    <div class="row">
+                        <div class="col-md-3 sinpadding">
+                            <select name="diaexp" id="dobday" class="form-control" required></select>
+                        </div>
+                        <div class="col-md-5">
+                            <select name="mesexp" id="dobmonth" class="form-control" required></select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="anoexp" id="dobyear" class="form-control" required onchange="funcionx()"></select>
                         </div>
                     </div>
-                    <div class="col-md-4 sinpadding">
-                        <div class="form-group">
-                            <label>Fecha de vencimiento</label>
-                            <!---<input class="form-control" type="text" name="fechaN" value="{{ datos.fechaN|date:"d/m/Y" }}" placeholder="DD/MM/AAAA">-->
-                            <div class="row">
-                                <div class="col-md-3 sinpadding">
-                                    <select name="diaven" id="dobdia" class="form-control" required></select>
-                                </div>
-                                <div class="col-md-5">
-                                    <select name="mesven" id="dobmes" class="form-control" required></select>
-                                </div>
-                                <div class="col-md-3">
-                                    <select name="anoven" id="dobano" class="form-control" required onchange="funciony()"></select>
-                                </div>
-                            </div>
+                </div>
+            </div>
+            <div class="col-md-4 sinpadding">
+                <div class="form-group">
+                    <label>Fecha de vencimiento</label>
+                    <!---<input class="form-control" type="text" name="fechaN" value="{{ datos.fechaN|date:"d/m/Y" }}" placeholder="DD/MM/AAAA">-->
+                    <div class="row">
+                        <div class="col-md-3 sinpadding">
+                            <select name="diaven" id="dobdia" class="form-control" required></select>
+                        </div>
+                        <div class="col-md-5">
+                            <select name="mesven" id="dobmes" class="form-control" required></select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="anoven" id="dobano" class="form-control" required onchange="funciony()"></select>
                         </div>
                     </div>
+                </div>
+            </div>
+            <table class="table table-bordered alt">
+                <thead>
+                    <tr>
+                        <th class="active col-sm-1">Documento</td>
+                        <th class="active col-sm-2">Nombres y apellidos </td>
+                        <th class="active col-sm-2">Parentesco </td>
+                        <th class="active col-sm-2">Fecha Expedición </td>
+                        <th class="active col-sm-2">Fecha Vencimiento </td>
+                    </tr>
+                </thead>
+                <tbody>
                     {% for beneficiario in beneficiarios %}
-                <tr>
-                    <td>{{ beneficiario.numeroDocumento }}</td>
-                    <td>{{ beneficiario.nombreUno|capfirst }} {{ beneficiario.nombreDos|capfirst }} {{ beneficiario.apellidoUno|capfirst }} {{ beneficiario.apellidoDos|capfirst }}</td>
-                    <td>{{ beneficiario.parentesco.parentesco }}</td>
-                    <td id="{{ beneficiario.numeroDocumento }}"></td>
-                    <td id="1{{ beneficiario.numeroDocumento }}"></td>
-                </tr>
-                {% endfor %}
-
-            </tbody>
-        </table>
+                        <tr>
+                            <td>{{ beneficiario.numeroDocumento }}</td>
+                            <td>{{ beneficiario.nombreUno|capfirst }} {{ beneficiario.nombreDos|capfirst }} {{ beneficiario.apellidoUno|capfirst }} {{ beneficiario.apellidoDos|capfirst }}</td>
+                            <td>{{ beneficiario.parentesco.parentesco }}</td>
+                            <td id="{{ beneficiario.numeroDocumento }}"></td>
+                            <td id="1{{ beneficiario.numeroDocumento }}"></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             <button type="submit" class="btn btn-success">Activar</button>
-
-</div>
+        </form>
+    </div>
 {% endblock %}
 {% block javascript %}
     <script src="{% static 'js/jquery.min.js' %}"></script>

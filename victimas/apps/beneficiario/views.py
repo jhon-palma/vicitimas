@@ -10,6 +10,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 import json
 import weasyprint
+from weasyprint import HTML
 
 def index(request):
     return render(request,'index.html')
@@ -754,21 +755,34 @@ def imprimirCarnet(request):
         beneficiario = request.GET['grupo']
         beneficiarios = Beneficiario.objects.filter(documentoCabeza = beneficiario )
         cnt = Carnet.objects.filter(grupo=beneficiario)
-        html = render_to_string('pdf.html',{'beneficiarios': cnt})
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename="carnet_{}.pdf"'.format("order.id")
-        weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response)
+        html_string = render_to_string('pdf.html',{'beneficiarios': cnt})
+        html = HTML(string=html_string)
+        html.write_pdf(target='/tmp/carnet.pdf')
+
+        fs = FileSystemStorage('/tmp')
+        with fs.open('carnet.pdf') as pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'filename="carnet.pdf"'.format("order.id")
+            return response
+
+
+        #weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response)
 
     if 'beneficiario' in request.GET.keys():
         beneficiario = request.GET['beneficiario']
-
-        beneficiarios = Beneficiario.objects.filter(numeroDocumento = beneficiario )
-
-        html = render_to_string('pdf.html',{'beneficiarios': beneficiarios})
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename="carnet_{}.pdf"'.format("order.id")
-        weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response)
-    return response
+        beneficiarios = Carnet.objects.get(codigo = beneficiario )
+        #import pdb; pdb.set_trace()
+        html = render_to_string('pdf.html',{'bnk': beneficiarios})
+        #response = HttpResponse(content_type='application/pdf')
+        #response['Content-Disposition'] = 'filename="carnet.pdf"'.format("order.id")
+        weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(target='/tmp/carnet.pdf')
+        fs = FileSystemStorage('/tmp')
+        with fs.open('carnet.pdf') as pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'filename="carnet.pdf"'.format("order.id")
+            return response
+        #weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response)
+    #return response
 
 def verdocumentos(request):
     if request.method == 'POST':
